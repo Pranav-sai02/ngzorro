@@ -1,0 +1,770 @@
+{
+  "servicesPage": [
+    {
+      "id": "1",
+      "description": "Cremation Ceremony Package",
+      "serviceType": "Cremation",
+      "voucherProvider": "Serenity Life Services",
+      "requireCell": true,
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "2",
+      "description": "Standard Burial Package",
+      "serviceType": "Burial",
+      "voucherProvider": "Peaceful Rest Providers",
+      "requireCell": false,
+      "isActive": false,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "3",
+      "description": "Family Transport Support",
+      "serviceType": "Logistics",
+      "voucherProvider": "Final Journey Logistics",
+      "requireCell": true,
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "4",
+      "description": "Memorial Event Planning",
+      "serviceType": "Planning",
+      "voucherProvider": "Legacy Memories Inc.",
+      "requireCell": false,
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "5",
+      "description": "Gravesite Maintenance Plan",
+      "serviceType": "Maintenance",
+      "voucherProvider": "Graceful Endings",
+      "requireCell": false,
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "6",
+      "description": "Post-Service Counseling",
+      "serviceType": "Support",
+      "voucherProvider": "Healing Hearts",
+      "requireCell": false,
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "7",
+      "description": "Religious Officiation Service",
+      "serviceType": "Ceremony",
+      "voucherProvider": "Faith & Peace Council",
+      "requireCell": true,
+      "isActive": false,
+      "view": "View",
+      "isDeleted": false
+    }
+  ],
+  "serviceProviders": [
+    {
+      "id": "1",
+      "name": "Ubuntu Funeral Services",
+      "vatNumber": "ZA123456789",
+      "officeAddress": "45 Commissioner Street, Johannesburg",
+      "storageAddress": "Plot 10, Kya Sands, Randburg",
+      "companyRegistrationNumber": "2012/056789/07",
+      "branch": "Gauteng",
+      "townCity": "Johannesburg",
+      "province": "Gauteng",
+      "phoneNumber": "+27 11 555 1234",
+      "faxNumber": "+27 11 555 5678",
+      "email": "info@ubuntu-funeral.co.za",
+      "serviceType": "Burial",
+      "designationNo": "DF-001",
+      "ratePerKm": "R12.50",
+      "canEditAddress": true,
+      "isActive": true,
+      "isVerified": true,
+      "isAccredited": true,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "2",
+      "name": "Mavuso Cremation Services",
+      "vatNumber": "ZA987654321",
+      "officeAddress": "12 Long Street, Cape Town",
+      "storageAddress": "Unit 2, Industrial Park, Bellville",
+      "companyRegistrationNumber": "2015/089632/07",
+      "branch": "Western Cape",
+      "townCity": "Cape Town",
+      "province": "Western Cape",
+      "phoneNumber": "+27 21 456 7890",
+      "faxNumber": "+27 21 456 7899",
+      "email": "contact@mavuso.co.za",
+      "serviceType": "Cremation",
+      "designationNo": "DF-002",
+      "ratePerKm": "R10.00",
+      "canEditAddress": false,
+      "isActive": true,
+      "isVerified": true,
+      "isAccredited": false,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "3",
+      "name": "Kwena Transport & Repatriation",
+      "vatNumber": "ZA223344556",
+      "officeAddress": "1 Church Square, Pretoria",
+      "storageAddress": "Warehouse 5, Pretoria North",
+      "companyRegistrationNumber": "2010/123789/07",
+      "branch": "Tshwane",
+      "townCity": "Pretoria",
+      "province": "Gauteng",
+      "phoneNumber": "+27 12 345 6789",
+      "faxNumber": "+27 12 345 6790",
+      "email": "admin@kwena-trans.co.za",
+      "serviceType": "Repatriation",
+      "designationNo": "DF-003",
+      "ratePerKm": "R14.00",
+      "canEditAddress": true,
+      "isActive": false,
+      "isVerified": false,
+      "isAccredited": true,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "4",
+      "name": "Zamani Memorial Services",
+      "vatNumber": "ZA554433221",
+      "officeAddress": "101 Main Street, Durban",
+      "storageAddress": "Block B, Industrial Area, Umlazi",
+      "companyRegistrationNumber": "2018/009877/07",
+      "branch": "KwaZulu-Natal",
+      "townCity": "Durban",
+      "province": "KwaZulu-Natal",
+      "phoneNumber": "+27 31 222 4444",
+      "faxNumber": "+27 31 222 4445",
+      "email": "zamani@memorial.co.za",
+      "serviceType": "Burial",
+      "designationNo": "DF-004",
+      "ratePerKm": "R11.20",
+      "canEditAddress": true,
+      "isActive": true,
+      "isVerified": true,
+      "isAccredited": false,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "5",
+      "name": "Siyabonga Funerals",
+      "vatNumber": "ZA112233445",
+      "officeAddress": "22 Nelson Mandela Drive, East London",
+      "storageAddress": "Stand 34, Buffalo Flats",
+      "companyRegistrationNumber": "2013/045612/07",
+      "branch": "Eastern Cape",
+      "townCity": "East London",
+      "province": "Eastern Cape",
+      "phoneNumber": "+27 43 123 9876",
+      "faxNumber": "+27 43 123 9877",
+      "email": "support@siyabongafunerals.co.za",
+      "serviceType": "Burial",
+      "designationNo": "DF-005",
+      "ratePerKm": "R9.80",
+      "canEditAddress": true,
+      "isActive": true,
+      "isVerified": false,
+      "isAccredited": false,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "6",
+      "name": "Bay Cremation Services",
+      "vatNumber": "ZA667788990",
+      "officeAddress": "14 Kings Way, Gqeberha",
+      "storageAddress": "Unit 7, Industrial Park, Walmer",
+      "companyRegistrationNumber": "2017/087650/07",
+      "branch": "Nelson Mandela Bay",
+      "townCity": "Gqeberha",
+      "province": "Eastern Cape",
+      "phoneNumber": "+27 41 889 1122",
+      "faxNumber": "+27 41 889 1123",
+      "email": "contact@baycremations.co.za",
+      "serviceType": "Cremation",
+      "designationNo": "DF-006",
+      "ratePerKm": "R10.00",
+      "canEditAddress": false,
+      "isActive": true,
+      "isVerified": true,
+      "isAccredited": true,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "7",
+      "name": "Lesedi Transport Services",
+      "vatNumber": "ZA778899001",
+      "officeAddress": "55 Freedom Avenue, Bloemfontein",
+      "storageAddress": "Depot 3, Langenhoven Park",
+      "companyRegistrationNumber": "2014/112200/07",
+      "branch": "Free State",
+      "townCity": "Bloemfontein",
+      "province": "Free State",
+      "phoneNumber": "+27 51 555 2121",
+      "faxNumber": "+27 51 555 2122",
+      "email": "info@leseditransport.co.za",
+      "serviceType": "Repatriation",
+      "designationNo": "DF-007",
+      "ratePerKm": "R13.75",
+      "canEditAddress": true,
+      "isActive": false,
+      "isVerified": false,
+      "isAccredited": false,
+      "view": "view",
+      "isDeleted": false
+    },
+    {
+      "id": "8",
+      "name": "Hope & Light Services",
+      "vatNumber": "ZA889900112",
+      "officeAddress": "200 Church Street, Pietermaritzburg",
+      "storageAddress": "Warehouse 4, Edendale",
+      "companyRegistrationNumber": "2016/065443/07",
+      "branch": "KwaZulu-Natal",
+      "townCity": "Pietermaritzburg",
+      "province": "KwaZulu-Natal",
+      "phoneNumber": "+27 33 345 6767",
+      "faxNumber": "+27 33 345 6768",
+      "email": "admin@hopeandlight.co.za",
+      "serviceType": "Burial",
+      "designationNo": "DF-008",
+      "ratePerKm": "R11.50",
+      "canEditAddress": true,
+      "isActive": true,
+      "isVerified": true,
+      "isAccredited": true,
+      "view": "view",
+      "isDeleted": false
+    }
+  ],
+  "serviceProviderTypes": [
+    {
+      "id": "1",
+      "code": "A1",
+      "description": "Funeral Director",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "2",
+      "code": "B2",
+      "description": "Florist",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "3",
+      "code": "C3",
+      "description": "Caterer",
+      "createdBy": "Editor",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "4",
+      "code": "D4",
+      "description": "Grave Digging Service",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "5",
+      "code": "E5",
+      "description": "Headstone Supplier",
+      "createdBy": "Admin",
+      "updatedBy": "Reviewer"
+    },
+    {
+      "id": "6",
+      "code": "F6",
+      "description": "Venue Hire",
+      "createdBy": "Editor",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "7",
+      "code": "G7",
+      "description": "Live Musicians",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "8",
+      "code": "H8",
+      "description": "Audio‑Visual Service",
+      "createdBy": "Reviewer",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "9",
+      "code": "I9",
+      "description": "Limousine Service",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "10",
+      "code": "J10",
+      "description": "Obituary Writer",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "11",
+      "code": "K11",
+      "description": "Memorial Video",
+      "createdBy": "Editor",
+      "updatedBy": "Reviewer"
+    },
+    {
+      "id": "12",
+      "code": "L12",
+      "description": "Bagpiper",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "13",
+      "code": "M13",
+      "description": "Organist",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "14",
+      "code": "N14",
+      "description": "Solo Vocalist",
+      "createdBy": "Reviewer",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "15",
+      "code": "O15",
+      "description": "Photo Slideshow",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "16",
+      "code": "P16",
+      "description": "Keepsake Printing",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "17",
+      "code": "Q17",
+      "description": "Urn Supplier",
+      "createdBy": "Admin",
+      "updatedBy": "Reviewer"
+    },
+    {
+      "id": "18",
+      "code": "R18",
+      "description": "Dove Release",
+      "createdBy": "Editor",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "19",
+      "code": "S19",
+      "description": "Fireworks Tribute",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "20",
+      "code": "T20",
+      "description": "Balloon Release",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "21",
+      "code": "U21",
+      "description": "Memory Table Setup",
+      "createdBy": "Reviewer",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "22",
+      "code": "V22",
+      "description": "Photo Montage Editing",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "23",
+      "code": "W23",
+      "description": "Eulogy Coach",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "24",
+      "code": "X24",
+      "description": "Celebrant",
+      "createdBy": "Admin",
+      "updatedBy": "Reviewer"
+    },
+    {
+      "id": "25",
+      "code": "Y25",
+      "description": "Memorial Jewelry",
+      "createdBy": "Editor",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "26",
+      "code": "Z26",
+      "description": "Tree‑Planting Tribute",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "27",
+      "code": "AA27",
+      "description": "Virtual Guestbook Host",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    },
+    {
+      "id": "28",
+      "code": "BB28",
+      "description": "Livestream Technician",
+      "createdBy": "Reviewer",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "29",
+      "code": "CC29",
+      "description": "ASL Interpreter",
+      "createdBy": "Admin",
+      "updatedBy": "Admin"
+    },
+    {
+      "id": "30",
+      "code": "DD30",
+      "description": "Pet Bereavement Care",
+      "createdBy": "Admin",
+      "updatedBy": "Editor"
+    }
+  ],
+  "areacodes": [
+    {
+      "id": "1",
+      "code": "001",
+      "description": "United States/Canada",
+      "type": "International",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "2",
+      "code": "044",
+      "description": "United Kingdom",
+      "type": "International",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "3",
+      "code": "091",
+      "description": "India",
+      "type": "International",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "4",
+      "code": "081",
+      "description": "Japan",
+      "type": "International",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "5",
+      "code": "061",
+      "description": "Australia",
+      "type": "International",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "6",
+      "code": "011",
+      "description": "Landline - New York",
+      "type": "Landline",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "7",
+      "code": "022",
+      "description": "Landline - Mumbai",
+      "type": "Landline",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "8",
+      "code": "079",
+      "description": "Landline - Ahmedabad",
+      "type": "Landline",
+      "isActive": false,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "9",
+      "code": "0987654321",
+      "description": "Mobile - Vodafone India",
+      "type": "Mobile",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "10",
+      "code": "0821",
+      "description": "Landline - Mysuru",
+      "type": "Landline",
+      "isActive": true,
+      "view": "View",
+      "isDeleted": false
+    },
+    {
+      "id": "11",
+      "code": "055",
+      "description": "Mobile - UAE Etisalat",
+      "type": "Mobile",
+      "isActive": false,
+      "view": "View",
+      "isDeleted": false
+    }
+  ],
+  "funeralRecords": [
+    {
+      "status": "Open",
+      "caseRef": "SAF-001",
+      "caseNo": "C-2025-001",
+      "caseDate": "2025-06-01",
+      "callerName": "Thabo Mokoena",
+      "deceasedName": "Nomsa Dlamini",
+      "client": "Mzansi Funeral Services",
+      "type": "Natural Causes",
+      "funeralDate": "2025-06-07",
+      "callerFirstName": "Thabo",
+      "callerLastName": "Mokoena",
+      "id": "4416"
+    },
+    {
+      "status": "Pending",
+      "caseRef": "SAF-002",
+      "caseNo": "C-2025-002",
+      "caseDate": "2025-06-02",
+      "callerName": "Ayanda Sithole",
+      "deceasedName": "Bongani Khumalo",
+      "client": "Ubuntu Memorials",
+      "type": "Accident",
+      "funeralDate": "2025-06-10",
+      "callerFirstName": "Ayanda",
+      "callerLastName": "Sithole",
+      "id": "987f"
+    },
+    {
+      "status": "Closed",
+      "caseRef": "SAF-003",
+      "caseNo": "C-2025-003",
+      "caseDate": "2025-05-30",
+      "callerName": "Sipho Nkosi",
+      "deceasedName": "Lindiwe Mhlongo",
+      "client": "Rainbow Funerals",
+      "type": "Illness",
+      "funeralDate": "2025-06-05",
+      "callerFirstName": "Sipho",
+      "callerLastName": "Nkosi",
+      "id": "ea73"
+    },
+    {
+      "status": "In Review",
+      "caseRef": "SAF-004",
+      "caseNo": "C-2025-004",
+      "caseDate": "2025-06-03",
+      "callerName": "Zanele Ndlovu",
+      "deceasedName": "Themba Zulu",
+      "client": "Mandela Burial Services",
+      "type": "Unknown",
+      "funeralDate": "2025-06-09",
+      "callerFirstName": "Zanele",
+      "callerLastName": "Ndlovu",
+      "id": "221d"
+    },
+    {
+      "status": "Open",
+      "caseRef": "SAF-005",
+      "caseNo": "C-2025-005",
+      "caseDate": "2025-06-04",
+      "callerName": "Lebo Seboko",
+      "deceasedName": "Gugulethu Maseko",
+      "client": "BaSotho Funerals",
+      "type": "Homicide",
+      "funeralDate": "2025-06-12",
+      "callerFirstName": "Lebo",
+      "callerLastName": "Seboko",
+      "id": "3ee7"
+    }
+  ], "client-groups": [
+    {
+      "ClientGroupId": 1,
+      "Name": "Group A",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 2,
+      "Name": "Group B",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 3,
+      "Name": "Group C",
+      "IsActive": false,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 4,
+      "Name": "Group D",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 5,
+      "Name": "Group E",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 6,
+      "Name": "Group F",
+      "IsActive": false,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 7,
+      "Name": "Group G",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 8,
+      "Name": "Group H",
+      "IsActive": false,
+      "IsDeleted": true
+    },
+    {
+      "ClientGroupId": 9,
+      "Name": "Group I",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 10,
+      "Name": "Group J",
+      "IsActive": true,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 11,
+      "Name": "Group K",
+      "IsActive": false,
+      "IsDeleted": false
+    },
+    {
+      "ClientGroupId": 12,
+      "Name": "Group L",
+      "IsActive": true,
+      "IsDeleted": false
+    }
+  ],
+   "clients": [
+    {
+      "Id": 1,
+      "Name": "Alpha Corp",
+      "ClaimsManager": "John Doe",
+      "ClientGroup": "Life Funeral",
+      "AreaCode": "011",
+      "Telephone": "0111234567",
+      "IsActive": true,
+      "isDeleted": false
+    },
+    {
+      "Id": 2,
+      "Name": "Beta Enterprises",
+      "ClaimsManager": "Jane Smith",
+      "ClientGroup": "General Insurance",
+      "AreaCode": "012",
+      "Telephone": "0129876543",
+      "IsActive": false,
+      "isDeleted": false
+    },
+    {
+      "Id": 3,
+      "Name": "Gamma Limited",
+      "ClaimsManager": "Alan Wake",
+      "ClientGroup": "Medical Aid",
+      "AreaCode": "013",
+      "Telephone": "0134567890",
+      "IsActive": true,
+      "isDeleted": false
+    },
+    {
+      "Id": 4,
+      "Name": "Delta Inc",
+      "ClaimsManager": "Susan Finch",
+      "ClientGroup": "Funeral Cover",
+      "AreaCode": "014",
+      "Telephone": "0141122334",
+      "IsActive": true,
+      "isDeleted": false
+    },
+    {
+      "Id": 5,
+      "Name": "Omega Services",
+      "ClaimsManager": "Mark Lee",
+      "ClientGroup": "Life Cover",
+      "AreaCode": "015",
+      "Telephone": "0157788990",
+      "IsActive": false,
+      "isDeleted": false
+    }
+  ]
+}
