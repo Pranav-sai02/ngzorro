@@ -641,81 +641,117 @@
       "callerLastName": "Seboko",
       "id": "3ee7"
     }
-  ], "client-groups": [
+  ],
+  "client-groups": [
     {
       "ClientGroupId": 1,
       "Name": "Group A",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "bbc6"
     },
     {
       "ClientGroupId": 2,
       "Name": "Group B",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "6e7a"
     },
     {
       "ClientGroupId": 3,
       "Name": "Group C",
       "IsActive": false,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "7b9f"
     },
     {
       "ClientGroupId": 4,
       "Name": "Group D",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "7e6c"
     },
     {
       "ClientGroupId": 5,
       "Name": "Group E",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "8d7e"
     },
     {
       "ClientGroupId": 6,
       "Name": "Group F",
       "IsActive": false,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "189d"
     },
     {
       "ClientGroupId": 7,
       "Name": "Group G",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "295e"
     },
     {
       "ClientGroupId": 8,
       "Name": "Group H",
       "IsActive": false,
-      "IsDeleted": true
+      "IsDeleted": true,
+      "id": "5951"
     },
     {
       "ClientGroupId": 9,
       "Name": "Group I",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "a0d7"
     },
     {
       "ClientGroupId": 10,
       "Name": "Group J",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "f271"
     },
     {
       "ClientGroupId": 11,
       "Name": "Group K",
       "IsActive": false,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "f8b0"
     },
     {
       "ClientGroupId": 12,
       "Name": "Group L",
       "IsActive": true,
-      "IsDeleted": false
+      "IsDeleted": false,
+      "id": "87de"
+    },
+    {
+      "id": "87de",
+      "ClientGroupId": 12,
+      "Name": "dwadawd",
+      "IsActive": true,
+      "IsDeleted": false,
+      "isEdited": true
+    },
+    {
+      "id": "87de",
+      "ClientGroupId": 12,
+      "Name": "dwadawd",
+      "IsActive": true,
+      "IsDeleted": false,
+      "isEdited": true,
+      "IsEdited": false
+    },
+    {
+      "id": "b1e1",
+      "Name": "wsdwd",
+      "IsActive": true,
+      "isEdited": true
     }
   ],
-   "clients": [
+  "clients": [
     {
       "Id": 1,
       "Name": "Alpha Corp",
@@ -724,7 +760,8 @@
       "AreaCode": "011",
       "Telephone": "0111234567",
       "IsActive": true,
-      "isDeleted": false
+      "isDeleted": false,
+      "id": "b1f1"
     },
     {
       "Id": 2,
@@ -734,7 +771,8 @@
       "AreaCode": "012",
       "Telephone": "0129876543",
       "IsActive": false,
-      "isDeleted": false
+      "isDeleted": false,
+      "id": "6e8f"
     },
     {
       "Id": 3,
@@ -744,7 +782,8 @@
       "AreaCode": "013",
       "Telephone": "0134567890",
       "IsActive": true,
-      "isDeleted": false
+      "isDeleted": false,
+      "id": "15a9"
     },
     {
       "Id": 4,
@@ -754,7 +793,8 @@
       "AreaCode": "014",
       "Telephone": "0141122334",
       "IsActive": true,
-      "isDeleted": false
+      "isDeleted": false,
+      "id": "c3c8"
     },
     {
       "Id": 5,
@@ -764,7 +804,8 @@
       "AreaCode": "015",
       "Telephone": "0157788990",
       "IsActive": false,
-      "isDeleted": false
+      "isDeleted": false,
+      "id": "2c63"
     }
   ]
 }

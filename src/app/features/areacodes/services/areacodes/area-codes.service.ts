@@ -11,16 +11,16 @@ export class AreaCodesService {
   private apiUrl = API_ENDPOINTS.AREA_CODES;
   // Replace with your real API endpoint
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-getAreaCodes(): Observable<AreaCodes[]> {
+  getAreaCodes(): Observable<AreaCodes[]> {
     return this.http.get<AreaCodes[]>(this.apiUrl);
   }
- 
+
   deleteAreaCode(code: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${code}`);
   }
- 
+
   //  addAreaCode(areaCode:  AreaCodes): Observable<AreaCodes> {
   //   return this.http.post<AreaCodes>(this.apiUrl, areaCode);
   // }
@@ -33,11 +33,12 @@ getAreaCodes(): Observable<AreaCodes[]> {
     };
     return this.http.post<AreaCodes>(this.apiUrl, payload);
   }
- 
-  updateAreaCode(areaCode: AreaCodes): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/${areaCode.AreaCode}`, areaCode);
+
+  updateAreaCode(oldCode: string, areaCode: Partial<AreaCodes>): Observable<void> {
+    const encodedOldCode = encodeURIComponent(oldCode.trim());
+    return this.http.put<void>(`${this.apiUrl}/${encodedOldCode}`, areaCode);
   }
- 
+
   softDeleteAreaCode(areaCode: AreaCodes): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/${areaCode.AreaCode}`, areaCode);
   }

@@ -134,7 +134,7 @@ export class ClientGroupComponent implements OnInit {
   constructor(
     private store: Store,
     private clientGroupService: ClientGroupService
-  ) {}
+  ) { }
 
   defaultColDef: ColDef = {
     flex: 1,

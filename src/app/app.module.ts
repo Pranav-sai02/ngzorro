@@ -75,6 +75,7 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
     ClientComponent,
     ClientGroupComponent,
     ClientPopupComponent,
+
   ],
   imports: [
     BrowserModule,

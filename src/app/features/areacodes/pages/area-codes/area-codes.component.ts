@@ -178,7 +178,7 @@ export class AreaCodesComponent implements OnInit {
   constructor(
     private store: Store,
     private areaCodesService: AreaCodesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.store.dispatch(new LoadAreaCodes());
@@ -194,43 +194,74 @@ export class AreaCodesComponent implements OnInit {
 
   onCellValueChanged(event: CellValueChangedEvent): void {
     const row = event.data;
-    const isNew = !row.AreaCodeId;
 
-    // Just mark the row as edited; don't save automatically
+    // Null check to avoid calling .trim() on undefined
+    const newValue = row.AreaCode?.trim();
+
+    // If AreaCode is empty, don't proceed
+    if (!newValue) {
+      row.AreaCode = ''; // Clear invalid value
+      row.isEdited = true;
+      this.gridApi.applyTransaction({ update: [row] });
+      return;
+    }
+
+    // Save original value if not already saved
+    if (!row.originalAreaCode) {
+      row.originalAreaCode = newValue;
+    }
+
+    row.AreaCode = newValue; // Save trimmed value back
     row.isEdited = true;
     this.gridApi.applyTransaction({ update: [row] });
   }
 
   saveRow(row: AreaCodes): void {
-    const isComplete =
-      row.AreaCode &&
-      row.AreaCode.trim() !== '' &&
-      row.Description &&
-      row.Description.trim() !== '' &&
-      row.Type !== undefined &&
-      row.Type !== null &&
-      row.IsActive !== null &&
-      row.IsActive !== undefined;
+    const isNew = !row.AreaCodeId;
 
-    if (isComplete) {
-      this.areaCodesService.addAreaCode(row).subscribe(
-        () => {
+    const trimmedCode = row.AreaCode?.trim() ?? '';
+    const trimmedDesc = row.Description?.trim() ?? '';
+    const isComplete = trimmedCode && trimmedDesc && row.Type && row.IsActive !== null;
+
+    if (!isComplete) {
+      alert('Please complete all required fields before saving.');
+      return;
+    }
+
+    row.AreaCode = trimmedCode + ' '; // add space for backend compatibility
+    row.Description = trimmedDesc;
+
+    if (isNew) {
+      this.areaCodesService.addAreaCode(row).subscribe({
+        next: () => {
           alert('Saved successfully!');
-
-          // Clear edited flag after save
           row.isEdited = false;
           this.gridApi.applyTransaction({ update: [row] });
-
-          // Optionally reload
           this.store.dispatch(new LoadAreaCodes());
         },
-        (error) => {
+        error: (err) => {
           alert('Error saving area code.');
-          console.error(error);
-        }
-      );
+          console.error(err);
+        },
+      });
     } else {
-      alert('Please complete all required fields before saving.');
+      const oldCode = (row.originalAreaCode ?? row.AreaCode).replace(/\s+$/, ''); // remove trailing space only
+
+
+      const { isEdited, originalAreaCode, isDeleted, AreaCodeId, ...sanitizedRow } = row;
+
+      this.store.dispatch(new UpdateAreaCode(oldCode, sanitizedRow)).subscribe({
+        next: () => {
+          alert('Updated successfully!');
+          row.isEdited = false;
+          delete row.originalAreaCode;
+          this.gridApi.applyTransaction({ update: [row] });
+        },
+        error: (err) => {
+          alert('Error updating area code.');
+          console.error(err);
+        },
+      });
     }
   }
 
@@ -251,8 +282,7 @@ export class AreaCodesComponent implements OnInit {
       Description: '',
       Type: 'Landline',
       IsActive: true,
-
-      // isDeleted: false,
+      originalAreaCode: ''
     };
     this.store.dispatch(new AddAreaCodeRowLocally(newRow));
   }
@@ -278,4 +308,5 @@ export class AreaCodesComponent implements OnInit {
 
     return [addRow, deleteRow, 'separator', 'copy', 'export'];
   };
+
 }

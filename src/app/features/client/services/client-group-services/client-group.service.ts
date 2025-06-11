@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ClientGroup } from '../../models/ClientGroup';
 import { Observable } from 'rxjs';
+import { API_ENDPOINTS } from '../../../../constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { Observable } from 'rxjs';
 export class ClientGroupService {
 
       
-  private apiUrl = 'http://localhost:3000/client-groups'; 
+  private apiUrl = API_ENDPOINTS.CLIENTGROUP;
 
   constructor(private http: HttpClient) {}
 

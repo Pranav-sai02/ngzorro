@@ -20,9 +20,16 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { provideNzI18n } from 'ng-zorro-antd/i18n';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CallerDetailsComponent } from './call-details/components/caller-details/caller-details.component';
+import { ValidationComponent } from './call-details/components/validation/validation.component';
+import { VoucherSmsComponent } from './call-details/components/voucher-sms/voucher-sms.component';
+import { ComplaintsComponent } from './call-details/components/complaints/complaints.component';
+import { DocumentsComponent } from './call-details/components/documents/documents.component';
+
 
 @NgModule({
-  declarations: [CallsComponent, CallDetailsComponent,  ],
+  declarations: [CallsComponent, CallDetailsComponent, CallerDetailsComponent, ValidationComponent, VoucherSmsComponent, ComplaintsComponent, DocumentsComponent,  ],
   imports: [
     CommonModule,
     CallsModuleRoutingModule,
@@ -44,6 +51,7 @@ import { provideNzI18n } from 'ng-zorro-antd/i18n';
     NzFormModule,//for ng-zorro
     NzIconModule,//for ng-zorro
      NzStepsModule,//for ng-zorro
+     MatTabsModule,//for angular material
   ],
   exports: [CallsComponent, CallDetailsComponent],
 })
