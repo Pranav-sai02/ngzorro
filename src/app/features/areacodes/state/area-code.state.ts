@@ -64,26 +64,30 @@ export class AreaCodesState {
   }
 
 
-  @Action(UpdateAreaCode)
-  updateAreaCode(
-    ctx: StateContext<AreaCodesStateModel>,
-    action: UpdateAreaCode
-  ) {
-    const state = ctx.getState();
+ @Action(UpdateAreaCode)
+updateAreaCode(
+  ctx: StateContext<AreaCodesStateModel>,
+  action: UpdateAreaCode
+) {
+  const state = ctx.getState();
 
-    const updatedAreaCodes = state.areaCodes.map((areaCode) =>
-      areaCode.AreaCodeId === action.payload.AreaCodeId
-        ? action.payload
-        : areaCode
-    );
+  const updatedAreaCodes = state.areaCodes.map((areaCode) =>
+    areaCode.AreaCodeId === action.payload.AreaCodeId ? action.payload : areaCode
+  );
 
-    ctx.patchState({ areaCodes: updatedAreaCodes });
+  ctx.patchState({ areaCodes: updatedAreaCodes });
 
-    // ✅ Sanitize before sending to API
-    const { AreaCodeId, isEdited, originalAreaCode, isDeleted, ...sanitizedPayload } = action.payload;
+  // ✅ Sanitize payload for API
+  const {
+    AreaCodeId,
+    isEdited,
+    originalAreaCode,
+    isDeleted,
+    ...sanitizedPayload
+  } = action.payload;
 
-    return this.areaCodesService.updateAreaCode(action.oldCode, sanitizedPayload);
-  }
+  return this.areaCodesService.updateAreaCode(action.areaCodeId, sanitizedPayload);
+}
 
   @Action(SoftDeleteAreaCode)
   softDeleteAreaCode(

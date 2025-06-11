@@ -119,37 +119,59 @@ export class AreaCodesComponent implements OnInit {
       onCellClicked: (params: any) => this.softDeleteProvider(params.data),
     },
     {
-      headerName: 'Save',
-      flex: 1,
-      minWidth: 120,
-      cellRenderer: (params: any) => {
-        const isNew = !params.data.AreaCodeId;
-        const isEdited = params.data.isEdited === true;
-        const disabled = !(isNew || isEdited);
-        const disabledAttr = disabled ? 'disabled' : '';
+  headerName: 'Save',
+  flex: 1,
+  minWidth: 120,
+  cellRenderer: (params: any) => {
+    const isNew = !params.data.AreaCodeId;
+    const isEdited = params.data.isEdited === true;
+    const disabled = !(isNew || isEdited);
+    const disabledAttr = disabled ? 'disabled' : '';
 
-        return `
-    <button
-      ${disabledAttr}
-      style="
-        background-color: ${disabled ? '#ccc' : '#05b9bc'};
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 500;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        padding: 0 14px;
-        font-size: 1rem;
-        justify-content: center;
-        cursor: ${disabled ? 'not-allowed' : 'pointer'};
-      "
-    >
-      Save
-    </button>
-  `;
-      },
+    const buttonBg = disabled ? '#ccc' : '#05b9bc';
+    const circleBg = disabled ? '#e0e0e0' : 'white';
+    const iconColor = disabled ? '#9e9e9e' : '#05b9bc';
+
+    return `
+      <button
+        ${disabledAttr}
+        style="
+          background-color: ${buttonBg};
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 500;
+          height: 42px;
+          display: flex;
+          align-items: center;
+          padding: 0 14px;
+          font-size: 1rem;
+          justify-content: center;
+          cursor: ${disabled ? 'not-allowed' : 'pointer'};
+        "
+      >
+        <span
+          style="
+            background-color: ${circleBg};
+            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 8px;
+          "
+        >
+          <i class="fa-solid fa-check" style="
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: ${iconColor};
+          "></i>
+        </span>
+        <span>Save</span>
+      </button>
+    `;
+  },
       cellStyle: {
         borderRight: '1px solid #ccc',
         display: 'flex',
@@ -228,7 +250,8 @@ export class AreaCodesComponent implements OnInit {
       return;
     }
 
-    row.AreaCode = trimmedCode + ' '; // add space for backend compatibility
+    // Add trailing space for backend compatibility
+    row.AreaCode = trimmedCode;
     row.Description = trimmedDesc;
 
     if (isNew) {
@@ -245,12 +268,18 @@ export class AreaCodesComponent implements OnInit {
         },
       });
     } else {
-      const oldCode = (row.originalAreaCode ?? row.AreaCode).replace(/\s+$/, ''); // remove trailing space only
+      const areaCodeId = row.AreaCodeId;
 
+      // 🔥 Clean row: remove internal-only frontend fields
+      const {
+        AreaCodeId,
+        isEdited,
+        originalAreaCode,
+        isDeleted,
+        ...sanitizedRow
+      } = row;
 
-      const { isEdited, originalAreaCode, isDeleted, AreaCodeId, ...sanitizedRow } = row;
-
-      this.store.dispatch(new UpdateAreaCode(oldCode, sanitizedRow)).subscribe({
+      this.areaCodesService.updateAreaCode(areaCodeId!, sanitizedRow).subscribe({
         next: () => {
           alert('Updated successfully!');
           row.isEdited = false;
@@ -282,7 +311,7 @@ export class AreaCodesComponent implements OnInit {
       Description: '',
       Type: 'Landline',
       IsActive: true,
-      originalAreaCode: ''
+
     };
     this.store.dispatch(new AddAreaCodeRowLocally(newRow));
   }

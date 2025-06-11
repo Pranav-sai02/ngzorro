@@ -15,7 +15,7 @@ export class AddAreaCodeRowLocally {
 
 export class UpdateAreaCode {
   static readonly type = '[AreaCodes] Update';
-  constructor(public oldCode: string, public payload: AreaCodes) { }
+  constructor(public areaCodeId: number, public payload: AreaCodes) { }
 }
 
 export class SoftDeleteAreaCode {

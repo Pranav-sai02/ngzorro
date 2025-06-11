@@ -21,9 +21,6 @@ export class AreaCodesService {
     return this.http.delete<void>(`${this.apiUrl}/${code}`);
   }
 
-  //  addAreaCode(areaCode:  AreaCodes): Observable<AreaCodes> {
-  //   return this.http.post<AreaCodes>(this.apiUrl, areaCode);
-  // }
   addAreaCode(areaCode: AreaCodes): Observable<AreaCodes> {
     const payload = {
       AreaCode: areaCode.AreaCode,
@@ -34,9 +31,8 @@ export class AreaCodesService {
     return this.http.post<AreaCodes>(this.apiUrl, payload);
   }
 
-  updateAreaCode(oldCode: string, areaCode: Partial<AreaCodes>): Observable<void> {
-    const encodedOldCode = encodeURIComponent(oldCode.trim());
-    return this.http.put<void>(`${this.apiUrl}/${encodedOldCode}`, areaCode);
+  updateAreaCode(areaCodeId: number, data: Partial<AreaCodes>): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${areaCodeId}`, data);
   }
 
   softDeleteAreaCode(areaCode: AreaCodes): Observable<void> {

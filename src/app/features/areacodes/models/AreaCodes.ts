@@ -1,6 +1,6 @@
   export interface AreaCodes {
     originalAreaCode?: string;
-    AreaCodeId?: number;
+    AreaCodeId?: number | undefined;
     AreaCode: string;
     Description: string;
     Type: 'Landline' | 'Mobile' | 'International';
