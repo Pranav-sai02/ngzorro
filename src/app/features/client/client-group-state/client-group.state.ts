@@ -22,7 +22,7 @@ export interface ClientGroupStateModel {
 })
 @Injectable()
 export class ClientGroupState {
-  constructor(private clientGroupService: ClientGroupService) {}
+  constructor(private clientGroupService: ClientGroupService) { }
 
   @Selector()
   static getClientGroups(state: ClientGroupStateModel) {

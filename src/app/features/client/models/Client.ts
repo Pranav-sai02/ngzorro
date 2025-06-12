@@ -1,4 +1,3 @@
-import { AreaCodes } from '../../areacodes/models/AreaCodes';
 
 export interface Client {
   Id?: number;

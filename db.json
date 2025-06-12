@@ -765,47 +765,25 @@
     },
     {
       "Id": 2,
-      "Name": "Beta Enterprises",
+      "Name": "Beta Ltd",
       "ClaimsManager": "Jane Smith",
-      "ClientGroup": "General Insurance",
-      "AreaCode": "012",
-      "Telephone": "0129876543",
+      "ClientGroup": "Health Assist",
+      "AreaCode": "022",
+      "Telephone": "0227654321",
       "IsActive": false,
       "isDeleted": false,
-      "id": "6e8f"
+      "id": "b1f2"
     },
     {
       "Id": 3,
-      "Name": "Gamma Limited",
-      "ClaimsManager": "Alan Wake",
-      "ClientGroup": "Medical Aid",
-      "AreaCode": "013",
-      "Telephone": "0134567890",
+      "Name": "Gamma Solutions",
+      "ClaimsManager": "Alan Turing",
+      "ClientGroup": "General Cover",
+      "AreaCode": "033",
+      "Telephone": "0333333333",
       "IsActive": true,
       "isDeleted": false,
-      "id": "15a9"
-    },
-    {
-      "Id": 4,
-      "Name": "Delta Inc",
-      "ClaimsManager": "Susan Finch",
-      "ClientGroup": "Funeral Cover",
-      "AreaCode": "014",
-      "Telephone": "0141122334",
-      "IsActive": true,
-      "isDeleted": false,
-      "id": "c3c8"
-    },
-    {
-      "Id": 5,
-      "Name": "Omega Services",
-      "ClaimsManager": "Mark Lee",
-      "ClientGroup": "Life Cover",
-      "AreaCode": "015",
-      "Telephone": "0157788990",
-      "IsActive": false,
-      "isDeleted": false,
-      "id": "2c63"
+      "id": "b1f3"
     }
   ]
 }

@@ -1,16 +1,15 @@
-<!-- AG Grid -->
-  <div class="ag-theme-alpine" style="height: 500px; width: 100%;">
+
+
+  <div class="ag-theme-alpine ag-grid-responsive" style="height: auto; min-height: 500px;">
     <ag-grid-angular
-      class="ag-grid-responsive"
       [rowData]="users"
       [columnDefs]="columnDefs"
       [defaultColDef]="defaultColDef"
       [gridOptions]="gridOptions"
       [components]="{
-      activeToggleRenderer: ActiveToggleRendererComponent,
-      softDeleteRenderer: softDeleteRenderer,
-    }"
-      (gridReady)="onGridReady($event)"
-    >
+        activeToggleRenderer: ActiveToggleRendererComponent,
+        softDeleteRenderer: softDeleteRenderer
+      }"
+      (gridReady)="onGridReady($event)">
     </ag-grid-angular>
   </div>

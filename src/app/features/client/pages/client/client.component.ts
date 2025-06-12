@@ -23,6 +23,7 @@ export class ClientComponent implements OnInit {
   users: Client[] = []; // Array to hold client data
   gridApi!: GridApi; // AG Grid API
 
+
   /* === AG-Grid Options === */
   gridOptions: GridOptions = {
     context: { componentParent: this },
@@ -33,7 +34,7 @@ export class ClientComponent implements OnInit {
     animateRows: true,
     rowSelection: 'single',
     rowClassRules: {
-      'temporary-row': (params) => params.data.name.includes('(INACTIVE)'), // Highlight inactive rows
+      'temporary-row': ({ data }) => data?.Name?.includes('(INACTIVE)'),
     },
   };
 
@@ -137,7 +138,7 @@ export class ClientComponent implements OnInit {
     activeToggleRenderer: ActiveToggleRendererComponent,
   };
 
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService) { }
 
   /* === Lifecycle === */
   ngOnInit(): void {
@@ -160,13 +161,15 @@ export class ClientComponent implements OnInit {
     this.clientService.getClient().subscribe({
       next: (data: Client[]) => {
         this.users = data;
-        this.resizeGrid();
+        console.log('Loaded clients:', this.users); // Optional debug
       },
       error: (err: any) => {
         console.error('Failed to load clients', err);
       },
     });
   }
+
+
 
   onExport(): void {
     this.gridApi.exportDataAsCsv({

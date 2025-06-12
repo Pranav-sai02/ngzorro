@@ -45,7 +45,16 @@ import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { providePrimeNG } from 'primeng/config';  // ✅ correct path
+import Aura from '@primeng/themes/aura';  
+import { ButtonModule } from 'primeng/button'; 
+import { StepperModule } from 'primeng/stepper'; 
+import { Component } from '@angular/core';
+import { InputTextModule } from 'primeng/inputtext';
+import { ToggleButton } from 'primeng/togglebutton';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
+import { CommonModule } from '@angular/common';
 
 registerLocaleData(en);
 
@@ -87,6 +96,14 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
     ReactiveFormsModule,
     BrowserAnimationsModule,
     EditorModule,
+    ButtonModule,//prime ng 
+    StepperModule,
+      ButtonModule,
+      InputTextModule,
+      ToggleButton,
+      IconField,
+      InputIcon,
+      CommonModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-top-right',
@@ -95,7 +112,15 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
     ServiceProviderModule,
     NgxsModule.forRoot([AreaCodesState, ClientGroupState]),
   ],
-  providers: [provideClientHydration(withEventReplay()), provideNzI18n(en_US), provideAnimationsAsync(), provideHttpClient()],
+  providers: [provideClientHydration(withEventReplay()), provideNzI18n(en_US),provideAnimationsAsync(),
+        providePrimeNG({
+            theme: {
+                preset: Aura,
+                options: {
+            darkModeSelector: false || 'none'
+        }
+            }
+        }), provideHttpClient()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

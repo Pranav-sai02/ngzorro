@@ -4,21 +4,35 @@ import { Component } from '@angular/core';
   selector: 'app-dashboard',
   standalone: false,
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
-  selectedTab = 0;
 
-  tabs = [
-    { title: 'Caller' },
-    { title: 'Validation' },
-    { title: 'Voucher/SMS' },
-    { title: 'Complaints' },
-    { title: 'Documents' }
-  ];
+  activeStep: number = 1;
 
-  selectTab(index: number): void {
-    this.selectedTab = index;
-  }
+  name: string | null | undefined = null;
+  email: string | null | undefined = null;
+  password: string | null | undefined = null;
+
+  option1: boolean | undefined = false;
+
+  option2: boolean | undefined = false;
+
+  option3: boolean | undefined = false;
+
+  option4: boolean | undefined = false;
+
+  option5: boolean | undefined = false;
+
+  option6: boolean | undefined = false;
+
+  option7: boolean | undefined = false;
+
+  option8: boolean | undefined = false;
+
+  option9: boolean | undefined = false;
+
+  option10: boolean | undefined = false;
+
 
 }
