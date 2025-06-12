@@ -84,33 +84,27 @@ export class ClientGroupComponent implements OnInit {
       headerName: 'Save',
       flex: 1,
       minWidth: 120,
-      cellRenderer: (params: any) => {
-        const isNew = !params.data.ClientGroupId;
-        const isEdited = params.data.isEdited === true;
-        const disabled = !(isNew || isEdited);
-        const disabledAttr = disabled ? 'disabled' : '';
-
+      cellRenderer: () => {
         return `
-    <button
-      ${disabledAttr}
-      style="
-        background-color: ${disabled ? '#ccc' : '#05b9bc'};
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 500;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        padding: 0 14px;
-        font-size: 1rem;
-        justify-content: center;
-        cursor: ${disabled ? 'not-allowed' : 'pointer'};
-      "
-    >
-      Save
-    </button>
-  `;
+      <button
+        style="
+          background-color: #05b9bc;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-weight: 500;
+          height: 42px;
+          display: flex;
+          align-items: center;
+          padding: 0 14px;
+          font-size: 1rem;
+          justify-content: center;
+          cursor: pointer;
+        "
+      >
+        Save
+      </button>
+    `;
       },
       cellStyle: {
         borderRight: '1px solid #ccc',
@@ -120,15 +114,9 @@ export class ClientGroupComponent implements OnInit {
       },
       headerClass: 'bold-header',
       onCellClicked: (params: any) => {
-        const data = params.data;
-        const isNew = !data.ClientGroupId;
-        const isEdited = data.isEdited === true;
-
-        if (isNew || isEdited) {
-          this.saveRow(data);
-        }
+        this.saveRow(params.data);
       },
-    },
+    }
   ];
 
   constructor(

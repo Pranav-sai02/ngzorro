@@ -119,24 +119,14 @@ export class AreaCodesComponent implements OnInit {
       onCellClicked: (params: any) => this.softDeleteProvider(params.data),
     },
     {
-  headerName: 'Save',
-  flex: 1,
-  minWidth: 120,
-  cellRenderer: (params: any) => {
-    const isNew = !params.data.AreaCodeId;
-    const isEdited = params.data.isEdited === true;
-    const disabled = !(isNew || isEdited);
-    const disabledAttr = disabled ? 'disabled' : '';
-
-    const buttonBg = disabled ? '#ccc' : '#05b9bc';
-    const circleBg = disabled ? '#e0e0e0' : 'white';
-    const iconColor = disabled ? '#9e9e9e' : '#05b9bc';
-
-    return `
+      headerName: 'Save',
+      flex: 1,
+      minWidth: 120,
+      cellRenderer: () => {
+        return `
       <button
-        ${disabledAttr}
         style="
-          background-color: ${buttonBg};
+          background-color: #05b9bc;
           color: white;
           border: none;
           border-radius: 8px;
@@ -147,31 +137,13 @@ export class AreaCodesComponent implements OnInit {
           padding: 0 14px;
           font-size: 1rem;
           justify-content: center;
-          cursor: ${disabled ? 'not-allowed' : 'pointer'};
+          cursor: pointer;
         "
       >
-        <span
-          style="
-            background-color: ${circleBg};
-            border-radius: 50%;
-            width: 26px;
-            height: 26px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 8px;
-          "
-        >
-          <i class="fa-solid fa-check" style="
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: ${iconColor};
-          "></i>
-        </span>
-        <span>Save</span>
+        Save
       </button>
     `;
-  },
+      },
       cellStyle: {
         borderRight: '1px solid #ccc',
         display: 'flex',
@@ -180,15 +152,9 @@ export class AreaCodesComponent implements OnInit {
       },
       headerClass: 'bold-header',
       onCellClicked: (params: any) => {
-        const data = params.data;
-        const isNew = !data.AreaCodeId;
-        const isEdited = data.isEdited === true;
-
-        if (isNew || isEdited) {
-          this.saveRow(data);
-        }
+        this.saveRow(params.data);
       },
-    },
+    }
   ];
 
   defaultColDef: ColDef = {

@@ -69,9 +69,9 @@ export class CallDetailsComponent implements OnInit {
     this.caseData = this.callDataService.getSelectedCall();
   }
 
-  selectTab(tabName: string) {
-    this.activeTab = tabName;
-  }
+  // selectTab(tabName: string) {
+  //   this.activeTab = tabName;
+  // }
 
  
 
@@ -104,27 +104,20 @@ export class CallDetailsComponent implements OnInit {
     console.log('Case process complete');
   }
 
-  // changeContent(): void {
-  //   switch (this.current) {
-  //     case 0:
-  //       this.index = 'Case Initiation – Start the case and collect details';
-  //       break;
-  //     case 1:
-  //       this.index = 'Evaluation – Review and validate documents';
-  //       break;
-  //     case 2:
-  //       this.index = 'Ongoing – Actions in progress for case';
-  //       break;
-  //     case 3:
-  //       this.index = 'On Hold – Awaiting external updates';
-  //       break;
-  //     case 4:
-  //       this.index = 'Resolution – Final checks and close the case';
-  //       break;
-  //     default:
-  //       this.index = 'Error – Invalid step';
-  //   }
-  // }
+    selectedTab = 0;
+
+  tabs = [
+    { label: 'Caller' },
+    { label: 'Validation' },
+    { label: 'Voucher/SMS' },
+    { label: 'Complaints' },
+    { label: 'Documents' }
+  ];
+
+  selectTab(index: number) {
+    this.selectedTab = index;
+  }
+  
 
 
 }
