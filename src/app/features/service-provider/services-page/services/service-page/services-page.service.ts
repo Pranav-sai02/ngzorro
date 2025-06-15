@@ -8,34 +8,37 @@ import { API_ENDPOINTS } from '../../../../../constants/api-endpoints';
   providedIn: 'root',
 })
 export class ServicesPageService {
+  // API endpoint for services page
   private readonly apiUrl = API_ENDPOINTS.SERVICES_PAGE;
 
   constructor(private http: HttpClient) {}
 
-  /** GET all */
+  // Get all services
   getAll(): Observable<ServicesPage[]> {
     return this.http.get<ServicesPage[]>(this.apiUrl);
   }
 
-  /** GET single */
+  // Get a service by ID
   get(id: number): Observable<ServicesPage> {
     return this.http.get<ServicesPage>(`${this.apiUrl}/${id}`);
   }
 
-  /** POST create */
+  // Create a new service entry
   create(payload: ServicesPage): Observable<ServicesPage> {
     return this.http.post<ServicesPage>(this.apiUrl, payload);
   }
 
-  /** PUT update (JSON Server supports PUT for full update) */
+  // Update an existing service entry
   update(serviceId: number, payload: ServicesPage): Observable<ServicesPage> {
     return this.http.put<ServicesPage>(`${this.apiUrl}/${serviceId}`, payload);
   }
-  /** DELETE */
+
+  // Hard delete a service entry
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  // Soft delete a service entry by setting IsDeleted to true
   softDelete(id: number): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}`, { IsDeleted: true });
   }
