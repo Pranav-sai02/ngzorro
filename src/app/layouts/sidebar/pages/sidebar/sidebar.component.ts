@@ -9,10 +9,10 @@ import { SidebarService } from '../../services/sidebar.service';
   styleUrl: './sidebar.component.css',
 })
 export class SidebarComponent implements OnInit {
-  groupedMenu: { [section: string]: Sidebar[] } = {};
-  topLevelMenuItems: Sidebar[] = [];
+  groupedMenu: { [section: string]: Sidebar[] } = {}; // Grouped menu items by section
+  topLevelMenuItems: Sidebar[] = []; // Items like Home/Dashboard shown outside group
 
-  // Custom display order of sections
+  // Display order for sidebar sections
   sectionOrder: string[] = [
     'Call Centre',
     'Configuration',
@@ -26,28 +26,32 @@ export class SidebarComponent implements OnInit {
     'Reports',
     'Sms',
     'Security',
-    'General', // Fallback
+    'General', // Fallback/default group
   ];
 
   constructor(private sidebarService: SidebarService) {}
 
   ngOnInit(): void {
+    // Fetch sidebar menu items from the service
     this.sidebarService.getMenuItems().subscribe({
       next: (items) => {
-        const activeItems = items.filter((item) => item.IsActive);
+        const activeItems = items.filter((item) => item.IsActive); // Only show active
 
+        // Top-level items (e.g., Home or Dashboard)
         this.topLevelMenuItems = activeItems.filter(
           (item) => item.MenuPath === 'Home' || item.MenuPath === 'DashBoard'
         );
 
+        // Groupable sub-items (with path structure like "Configuration/Settings")
         const groupableItems = activeItems
           .filter(
             (item) =>
               item.MenuPath.includes('/') &&
               !this.topLevelMenuItems.includes(item)
           )
-          .sort((a, b) => a.MenuId - b.MenuId);
+          .sort((a, b) => a.MenuId - b.MenuId); // Optional sorting
 
+        // Group items by first path segment
         this.groupedMenu = this.groupBySection(groupableItems);
       },
       error: (err) => {
@@ -56,18 +60,21 @@ export class SidebarComponent implements OnInit {
     });
   }
 
+  // Group sidebar items by their first path segment
   private groupBySection(items: Sidebar[]): { [section: string]: Sidebar[] } {
     const grouped: { [section: string]: Sidebar[] } = {};
+
     items.forEach((item) => {
       const pathParts = item.MenuPath.split('/');
       const section = pathParts.length > 1 ? pathParts[0] : 'General';
+
       if (!grouped[section]) {
         grouped[section] = [];
       }
       grouped[section].push(item);
     });
 
-    // Sort each section's items by menuId
+    // Sort items within each section by MenuId
     Object.keys(grouped).forEach((section) => {
       grouped[section].sort((a, b) => a.MenuId - b.MenuId);
     });

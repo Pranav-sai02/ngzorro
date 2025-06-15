@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ColDef, GridApi, GridOptions, ICellRendererParams, CellClickedEvent } from 'ag-grid-community';
+
 import { ActiveToggleRendererComponent } from '../../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
-import { ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { Call } from '../../models/Call';
 import { CallsService } from '../../services/call-services/calls.service';
-import { Router } from '@angular/router';
-import { ICellRendererParams, CellClickedEvent } from 'ag-grid-community';
 import { CallDataService } from '../../services/call-data-service/call-data.service';
 
 @Component({
@@ -19,6 +19,7 @@ export class CallsComponent implements OnInit {
   Cases: Call[] = [];
   gridApi!: GridApi;
 
+  // Column configuration for AG Grid
   columnDefs: ColDef<Call>[] = [
     {
       field: 'status',
@@ -49,13 +50,12 @@ export class CallsComponent implements OnInit {
 
         this.router.navigate(['/cases/case-details'], { queryParams });
       },
-
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
     {
       field: 'caseNo',
-      headerName: 'Case Number ',
+      headerName: 'Case Number',
       filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
@@ -82,7 +82,7 @@ export class CallsComponent implements OnInit {
     },
     {
       field: 'deceasedName',
-      headerName: 'Deceasced Name',
+      headerName: 'Deceased Name',
       filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
@@ -118,7 +118,11 @@ export class CallsComponent implements OnInit {
     },
   ];
 
-  defaultColDef: ColDef = { sortable: true, filter: true, resizable: true };
+  defaultColDef: ColDef = {
+    sortable: true,
+    filter: true,
+    resizable: true,
+  };
 
   constructor(
     private callService: CallsService,
@@ -126,16 +130,27 @@ export class CallsComponent implements OnInit {
     private callDataService: CallDataService
   ) {}
 
-  /* === lifecycle === */
+  // === Lifecycle ===
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  resizeGrid(): void {
-    if (this.gridApi) {
-      setTimeout(() => this.gridApi.sizeColumnsToFit(), 100);
-    }
+  // === Grid Events ===
+
+  onGridReady(params: any): void {
+    this.gridApi = params.api;
+    this.resizeGrid();
   }
+
+  onGridSizeChanged(): void {
+    this.onFitColumns();
+  }
+
+  onFitColumns(): void {
+    this.gridApi?.sizeColumnsToFit();
+  }
+
+  // === Data Operations ===
 
   loadUsers(): void {
     this.callService.getUsers().subscribe((data) => {
@@ -144,16 +159,12 @@ export class CallsComponent implements OnInit {
     });
   }
 
-  onGridReady(params: any): void {
-    this.gridApi = params.api;
-    this.resizeGrid();
-  }
+  // === Row Click Navigation ===
 
   onRowClicked(event: any): void {
     const call: Call = event.data;
 
-    // Optionally store full call object in service
-    this.callDataService.setSelectedCall(call);
+    this.callDataService.setSelectedCall(call); // Optionally persist selected call
 
     const queryParams = {
       callRef: call.caseRef,
@@ -164,13 +175,11 @@ export class CallsComponent implements OnInit {
     this.router.navigate(['/cases/case-details'], { queryParams });
   }
 
-  onFitColumns(): void {
-    this.gridApi?.sizeColumnsToFit();
-  }
+  // === Helpers ===
 
-  onGridSizeChanged(event: any): void {
-    this.onFitColumns();
+  private resizeGrid(): void {
+    if (this.gridApi) {
+      setTimeout(() => this.gridApi.sizeColumnsToFit(), 100);
+    }
   }
-
-  
 }

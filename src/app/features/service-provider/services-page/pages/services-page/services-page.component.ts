@@ -1,10 +1,6 @@
 import { Component } from '@angular/core';
-import {
-  ColDef,
-  GridApi,
-  GridReadyEvent,
-  ICellRendererParams,
-} from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent, ICellRendererParams } from 'ag-grid-community';
+
 import { ServicesPage } from '../../models/Services-page';
 import { ServicesPageService } from '../../services/service-page/services-page.service';
 import { ActiveToggleRendererComponent } from '../../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
@@ -18,15 +14,16 @@ import { SnackbarService } from '../../../../../core/services/snackbar/snackbar.
   styleUrl: './services-page.component.css',
 })
 export class ServicesPageComponent {
+  // Public properties
   ServicePage: ServicesPage[] = [];
-  private gridApi!: GridApi;
+  showPopup = false; // Controls popup visibility
+  selectedService: ServicesPage | null = null; // Selected item for editing popup
 
-  showPopup = false; // controls popup visibility
-  selectedService: ServicesPage | null = null; // currently selected service for popup
-
+  // Renderer components
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
   SoftDeleteRendererComponent = SoftDeleteButtonRendererComponent;
 
+  // Column definitions for AG Grid
   columnDefs: ColDef<ServicesPage>[] = [
     {
       field: 'Description',
@@ -43,9 +40,7 @@ export class ServicesPageComponent {
       sortable: true,
       flex: 1,
       minWidth: 120,
-      cellStyle: {
-        borderRight: '1px solid #ccc',
-      },
+      cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
     {
@@ -62,12 +57,8 @@ export class ServicesPageComponent {
       flex: 1,
       minWidth: 150,
       cellRenderer: (params: any) => {
-        const imagePath = params.value
-          ? 'assets/icons/tick.png'
-          : 'assets/icons/cross.png';
-        return `<img src="${imagePath}" alt="${
-          params.value ? 'Yes' : 'No'
-        }" style="width: 20px; height: 20px;" />`;
+        const imagePath = params.value ? 'assets/icons/tick.png' : 'assets/icons/cross.png';
+        return `<img src="${imagePath}" alt="${params.value ? 'Yes' : 'No'}" style="width: 20px; height: 20px;" />`;
       },
       cellStyle: {
         borderRight: '1px solid #ccc',
@@ -83,12 +74,8 @@ export class ServicesPageComponent {
       flex: 1,
       minWidth: 140,
       cellRenderer: (params: any) => {
-        const imagePath = params.value
-          ? 'assets/icons/tick.png'
-          : 'assets/icons/cross.png';
-        return `<img src="${imagePath}" alt="${
-          params.value ? 'Yes' : 'No'
-        }" style="width: 20px; height: 20px;" />`;
+        const imagePath = params.value ? 'assets/icons/tick.png' : 'assets/icons/cross.png';
+        return `<img src="${imagePath}" alt="${params.value ? 'Yes' : 'No'}" style="width: 20px; height: 20px;" />`;
       },
       cellStyle: {
         borderRight: '1px solid #ccc',
@@ -128,10 +115,8 @@ export class ServicesPageComponent {
       onCellClicked: (params: any) => this.openPopup(params.data),
       headerClass: 'bold-header',
     },
-
     {
       headerName: 'Delete',
-      // field: 'isDeleted',
       flex: 1,
       minWidth: 150,
       cellRenderer: 'softDeleteRenderer',
@@ -146,17 +131,22 @@ export class ServicesPageComponent {
     },
   ];
 
+  // Default column settings
   defaultColDef: ColDef = {
     sortable: true,
     filter: true,
     resizable: true,
   };
 
+  // Private variables
+  private gridApi!: GridApi;
+
   constructor(
     private ServicesPageService: ServicesPageService,
     private snackbarService: SnackbarService
   ) {}
 
+  // Lifecycle hook
   ngOnInit(): void {
     this.ServicesPageService.getAll().subscribe((data) => {
       this.ServicePage = data;
@@ -164,24 +154,23 @@ export class ServicesPageComponent {
     });
   }
 
+  // AG Grid ready callback
   onGridReady(e: GridReadyEvent) {
     this.gridApi = e.api;
     this.autoSizeColumnsBasedOnContent();
   }
 
+  // Adjust column widths based on excluded fields
   onFitColumns() {
     if (!this.gridApi) return;
 
     const allColDefs = this.gridApi.getColumnDefs() ?? [];
 
-    const allColumnFields = allColDefs
-      .filter(
-        (colDef): colDef is ColDef => (colDef as ColDef).field !== undefined
-      )
-      .map((colDef) => (colDef as ColDef).field!)
-      .filter((field) => field !== undefined);
+    const allFields = allColDefs
+      .filter((colDef): colDef is ColDef => !!(colDef as ColDef).field)
+      .map((colDef) => (colDef as ColDef).field!);
 
-    const columnsToFit = allColumnFields.filter(
+    const columnsToFit = allFields.filter(
       (field) =>
         ![
           'Description',
@@ -199,6 +188,7 @@ export class ServicesPageComponent {
     }
   }
 
+  // Auto-size selected columns based on content
   autoSizeColumnsBasedOnContent() {
     if (!this.gridApi) return;
 
@@ -214,42 +204,40 @@ export class ServicesPageComponent {
     this.gridApi.autoSizeColumns(columnsToAutoSize, false);
   }
 
-  // Open popup with selected service details
+  // Open popup for viewing/editing a service
   openPopup(service: ServicesPage): void {
     this.selectedService = service;
     this.showPopup = true;
   }
 
-  // Close popup and reset selected service
+  // Close popup
   closePopup(): void {
     this.showPopup = false;
     this.selectedService = null;
   }
 
-  // Handle form submit from popup: update the grid data
+  // Handle form submission from popup
   onServiceFormSubmit(updatedService: ServicesPage): void {
     const index = this.ServicePage.findIndex(
       (s) => s.ServiceId === updatedService.ServiceId
     );
+
     if (index > -1) {
       this.ServicePage[index] = updatedService;
-      this.ServicePage = [...this.ServicePage]; // update reference to trigger Angular change detection
-      this.gridApi.refreshCells(); // optionally refresh grid cells
+      this.ServicePage = [...this.ServicePage]; // Force Angular change detection
+      this.gridApi.refreshCells(); // Optionally refresh
     }
+
     this.closePopup();
   }
 
-  softDelete(ServicesPage: ServicesPage): void {
-    // Mark the item as deleted (optional if you want to preserve the flag)
-    ServicesPage.IsDeleted = true;
+  // Soft delete service from grid
+  softDelete(service: ServicesPage): void {
+    service.IsDeleted = true;
 
-    // Remove it from rowData
     this.ServicePage = this.ServicePage.filter(
-      (group) => group.ServiceId !== ServicesPage.ServiceId
+      (item) => item.ServiceId !== service.ServiceId
     );
-
-    // Optionally update the grid manually if you want
-    // this.gridApi.setRowData(this.rowData);
 
     this.snackbarService.showSuccess('Removed successfully');
   }

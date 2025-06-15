@@ -9,10 +9,11 @@ import { filter } from 'rxjs/operators';
   styleUrl: './breadcrumb.component.css',
 })
 export class BreadcrumbComponent {
-  currentPage: string = '';
-  currentRoute: string = '';
-  showPopup: boolean = false;
+  currentPage: string = ''; // Text for breadcrumb header
+  currentRoute: string = ''; // Full route path
+  showPopup: boolean = false; // Controls whether the popup is open
 
+  // Routes where the "New" button should be hidden
   private hideButtonRoutes: string[] = [
     '/area-codes',
     '/service-provider/types',
@@ -20,20 +21,14 @@ export class BreadcrumbComponent {
     '/cases/case-details',
   ];
 
-  // ✅ Centralized popup configuration
-  // private popupMap: { [key: string]: string } = {
-  //   '/users': 'users',
-  //   '/service-provider/service-providers': 'service-providers',
-  //   '/service-provider/service-provider-types': 'service-provider-types',
-  // };
-
   constructor(
     private router: Router,
-
     private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    // Set currentRoute initially and update on route changes
+    this.currentRoute = this.router.url;
     this.updateBreadcrumb();
 
     this.router.events
@@ -42,23 +37,9 @@ export class BreadcrumbComponent {
         this.currentRoute = event.urlAfterRedirects;
         this.updateBreadcrumb();
       });
-    this.currentRoute = this.router.url; // Initialize currentRoute
   }
 
-  // updateBreadcrumb(): void {
-  //   let route = this.activatedRoute.root;
-  //   let breadcrumb = '';
-
-  //   while (route.firstChild) {
-  //     route = route.firstChild;
-  //     if (route.snapshot.data['breadcrumb']) {
-  //       breadcrumb = route.snapshot.data['breadcrumb'];
-  //     }
-  //   }
-
-  //   this.currentPage = breadcrumb || 'Dashboard / Home';
-  // }
-
+  // Build breadcrumb from route config or dynamic parameters
   updateBreadcrumb(): void {
     const breadcrumbs: string[] = [];
     let route = this.activatedRoute.root;
@@ -70,7 +51,7 @@ export class BreadcrumbComponent {
       if (routeSnapshot.data['breadcrumb']) {
         breadcrumbs.push(routeSnapshot.data['breadcrumb']);
       } else if (routeSnapshot.params['id']) {
-        // Optional: fetch name by ID for dynamic breadcrumbs
+        // Optional: fallback for dynamic ID-based routes
         breadcrumbs.push(`Details for ${routeSnapshot.params['id']}`);
       }
     }
@@ -78,40 +59,32 @@ export class BreadcrumbComponent {
     this.currentPage = breadcrumbs.join(' / ') || 'Dashboard / Home';
   }
 
-  openPopup() {
+  // Show the floating popup
+  openPopup(): void {
     this.showPopup = true;
   }
 
-  closePopup() {
+  // Hide the popup
+  closePopup(): void {
     this.showPopup = false;
   }
 
+  // Dynamically choose which popup component to display based on current route
   get activePopup(): string | null {
     if (this.currentRoute.includes('/users')) return 'users';
-    // if (this.currentRoute.includes('/area-codes')) return 'areacodes';
-    if (this.currentRoute.includes('/service-provider/providers'))
-      return 'service-providers';
-    if (this.currentRoute.includes('/service-provider/types'))
-      return 'service-provider-types';
-    if (this.currentRoute.includes('/service-provider/services'))
-      return 'services';
+    if (this.currentRoute.includes('/service-provider/providers')) return 'service-providers';
+    if (this.currentRoute.includes('/service-provider/types')) return 'service-provider-types';
+    if (this.currentRoute.includes('/service-provider/services')) return 'services';
     if (this.currentRoute.includes('/client')) return 'client';
     if (this.currentRoute.includes('/cases')) return 'new';
 
     return null;
   }
 
+  // Determine whether the "New" button should be shown
   get showNewButton(): boolean {
-    return !this.hideButtonRoutes.some((route) =>
+    return !this.hideButtonRoutes.some(route =>
       this.currentRoute.includes(route)
     );
   }
-  // ✅ Dynamically determine which popup to show based on route
-  // get activePopup(): string | null {
-  //   return (
-  //     Object.entries(this.popupMap).find(([path]) =>
-  //       this.currentRoute.includes(path)
-  //     )?.[1] || null
-  //   );
-  // }
 }

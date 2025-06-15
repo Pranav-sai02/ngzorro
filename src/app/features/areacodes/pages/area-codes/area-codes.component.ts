@@ -1,40 +1,34 @@
 import { Component, OnInit } from '@angular/core';
-import { ActiveToggleRendererComponent } from '../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
-import { SoftDeleteButtonRendererComponent } from '../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
+import { CellValueChangedEvent, ColDef, GetContextMenuItems, GetContextMenuItemsParams, GridApi } from 'ag-grid-community';
+import { Store } from '@ngxs/store';
+
 import { AreaCodes } from '../../models/AreaCodes';
 import { AreaCodesService } from '../../services/areacodes/area-codes.service';
-import {
-  CellValueChangedEvent,
-  ColDef,
-  GetContextMenuItems,
-  GetContextMenuItemsParams,
-  GridApi,
-  ICellRendererParams,
-} from 'ag-grid-community';
-import {
-  AddAreaCodeRowLocally,
-  LoadAreaCodes,
-  SoftDeleteAreaCode,
-  UpdateAreaCode,
-} from '../../state/area-code.actions';
-import { Store } from '@ngxs/store';
-import { AreaCodesState } from '../../state/area-code.state';
 import { SnackbarService } from '../../../../core/services/snackbar/snackbar.service';
+
+import { ActiveToggleRendererComponent } from '../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
+import { SoftDeleteButtonRendererComponent } from '../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
+
+import { AddAreaCodeRowLocally, LoadAreaCodes, SoftDeleteAreaCode, UpdateAreaCode } from '../../state/area-code.actions';
+import { AreaCodesState } from '../../state/area-code.state';
 
 @Component({
   selector: 'app-area-codes',
   standalone: false,
   templateUrl: './area-codes.component.html',
-  styleUrl: './area-codes.component.css',
+  styleUrls: ['./area-codes.component.css'],
 })
 export class AreaCodesComponent implements OnInit {
+  // Renderer component references for AG Grid
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
   SoftDeleteRendererComponent = SoftDeleteButtonRendererComponent;
-  gridApi!: GridApi;
 
-  AreaCode: AreaCodes[] = [];
+  // Grid and data
+  public gridApi!: GridApi;
+  public AreaCode: AreaCodes[] = [];
 
-  columnDefs: ColDef<AreaCodes>[] = [
+  // Grid column definitions
+  public columnDefs: ColDef<AreaCodes>[] = [
     {
       field: 'AreaCode',
       headerName: 'Code',
@@ -43,11 +37,8 @@ export class AreaCodesComponent implements OnInit {
       maxWidth: 150,
       editable: true,
       cellEditor: 'agTextCellEditor',
-      valueFormatter: (params) =>
-        params.value ? params.value : 'Enter Areacode',
-      cellClassRules: {
-        'hint-text': (params) => !params.value,
-      },
+      valueFormatter: (params) => params.value ? params.value : 'Enter Areacode',
+      cellClassRules: { 'hint-text': (params) => !params.value },
       cellStyle: { borderRight: '1px solid #ccc', textAlign: 'center' },
       headerClass: 'bold-header',
     },
@@ -59,11 +50,8 @@ export class AreaCodesComponent implements OnInit {
       minWidth: 200,
       editable: true,
       cellEditor: 'agTextCellEditor',
-      valueFormatter: (params) =>
-        params.value ? params.value : 'Enter Country/Region',
-      cellClassRules: {
-        'hint-text': (params) => !params.value,
-      },
+      valueFormatter: (params) => params.value ? params.value : 'Enter Country/Region',
+      cellClassRules: { 'hint-text': (params) => !params.value },
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
@@ -74,27 +62,21 @@ export class AreaCodesComponent implements OnInit {
       flex: 1,
       minWidth: 180,
       editable: true,
-      // cellEditor: 'agSelectCellEditor',
       cellEditor: 'agRichSelectCellEditor',
       cellEditorParams: {
         values: ['Landline', 'Mobile', 'International'],
       },
-      valueFormatter: (params) => (params.value ? params.value : 'Select Type'),
-      cellClassRules: {
-        'hint-text': (params) => !params.value,
-      },
+      valueFormatter: (params) => params.value ? params.value : 'Select Type',
+      cellClassRules: { 'hint-text': (params) => !params.value },
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
-
     {
       field: 'IsActive',
       headerName: 'Active',
       flex: 1,
       minWidth: 120,
-
       cellRenderer: 'activeToggleRenderer',
-
       cellStyle: {
         borderRight: '1px solid #ccc',
         display: 'flex',
@@ -103,10 +85,8 @@ export class AreaCodesComponent implements OnInit {
       },
       headerClass: 'bold-header',
     },
-
     {
       headerName: 'Delete',
-      // field: 'isDeleted',
       flex: 1,
       minWidth: 100,
       cellRenderer: 'softDeleteRenderer',
@@ -125,34 +105,16 @@ export class AreaCodesComponent implements OnInit {
       minWidth: 120,
       cellRenderer: () => {
         return `
-    <style>
-      .save-icon-btn:hover .save-icon {
-        transform: scale(1.2) ;
-      }
-    </style>
-    <button
-      class="save-icon-btn"
-      style="
-        background-color: white;
-        color: #333;
-        border: none;
-        border-radius: 8px;
-        font-weight: 500;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0 14px;
-        font-size: 1rem;
-        gap: 8px;
-        cursor: pointer;
-      "
-    >
-      <i class="fas fa-save save-icon" style="color: #28a745; font-size: 1.2rem; transition: transform 0.3s ease;"></i> 
-    </button>
-  `;
+          <style>
+            .save-icon-btn:hover .save-icon {
+              transform: scale(1.2);
+            }
+          </style>
+          <button class="save-icon-btn" style="background-color: white; color: #333; border: none; border-radius: 8px; font-weight: 500; height: 42px; display: flex; align-items: center; justify-content: center; padding: 0 14px; font-size: 1rem; gap: 8px; cursor: pointer;">
+            <i class="fas fa-save save-icon" style="color: #28a745; font-size: 1.2rem; transition: transform 0.3s ease;"></i>
+          </button>
+        `;
       },
-
       cellStyle: {
         borderRight: '1px solid #ccc',
         display: 'flex',
@@ -160,13 +122,11 @@ export class AreaCodesComponent implements OnInit {
         justifyContent: 'center',
       },
       headerClass: 'bold-header',
-      onCellClicked: (params: any) => {
-        this.saveRow(params.data);
-      },
+      onCellClicked: (params: any) => this.saveRow(params.data),
     },
   ];
 
-  defaultColDef: ColDef = {
+  public defaultColDef: ColDef = {
     sortable: true,
     filter: true,
     resizable: true,
@@ -175,63 +135,54 @@ export class AreaCodesComponent implements OnInit {
   constructor(
     private store: Store,
     private areaCodesService: AreaCodesService,
-    private snackbarService:SnackbarService
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
     this.store.dispatch(new LoadAreaCodes());
     this.store.select(AreaCodesState.getAreaCodes).subscribe((data) => {
-      console.log('From select:', data);
       this.AreaCode = data;
     });
   }
 
+  // Initialize grid API
   onGridReady(params: any): void {
     this.gridApi = params.api;
   }
 
+  // Handle inline cell edit changes
   onCellValueChanged(event: CellValueChangedEvent): void {
     const row = event.data;
-
-    // Null check to avoid calling .trim() on undefined
     const newValue = row.AreaCode?.trim();
 
-    // If AreaCode is empty, don't proceed
     if (!newValue) {
-      row.AreaCode = ''; // Clear invalid value
+      row.AreaCode = '';
       row.isEdited = true;
       this.gridApi.applyTransaction({ update: [row] });
       return;
     }
 
-    // Save original value if not already saved
     if (!row.originalAreaCode) {
       row.originalAreaCode = newValue;
     }
 
-    row.AreaCode = newValue; // Save trimmed value back
+    row.AreaCode = newValue;
     row.isEdited = true;
     this.gridApi.applyTransaction({ update: [row] });
   }
 
+  // Save row data to server (create or update)
   saveRow(row: AreaCodes): void {
     const isNew = !row.AreaCodeId;
-
     const trimmedCode = row.AreaCode?.trim() ?? '';
     const trimmedDesc = row.Description?.trim() ?? '';
-    const isComplete =
-      trimmedCode && trimmedDesc && row.Type && row.IsActive !== null;
+    const isComplete = trimmedCode && trimmedDesc && row.Type && row.IsActive !== null;
 
-    // if (!isComplete) {
-    //   alert('Please complete all required fields before saving.');
-    //   return;
-    // }
     if (!isNew && !row.isEdited) {
       this.snackbarService.showInfo('No changes to save.');
       return;
     }
 
-    // Add trailing space for backend compatibility
     row.AreaCode = trimmedCode;
     row.Description = trimmedDesc;
 
@@ -249,64 +200,46 @@ export class AreaCodesComponent implements OnInit {
         },
       });
     } else {
-      const areaCodeId = row.AreaCodeId;
-
-      // 🔥 Clean row: remove internal-only frontend fields
-      const {
-        AreaCodeId,
-        isEdited,
-        originalAreaCode,
-        isDeleted,
-        ...sanitizedRow
-      } = row;
-
-      this.areaCodesService
-        .updateAreaCode(areaCodeId!, sanitizedRow)
-        .subscribe({
-          next: () => {
-           // alert('Updated successfully!');
-           this.snackbarService.showSuccess('Updated successfully!');
-            row.isEdited = false;
-            delete row.originalAreaCode; // Remove originalAreaCode after save
-
-            this.gridApi.applyTransaction({ update: [row] });
-          },
-          error: (err) => {
-            
-            //this.snackbarService.showError('Error updating area code.');
-            console.error(err);
-          },
-        });
+      const { AreaCodeId, isEdited, originalAreaCode, isDeleted, ...sanitizedRow } = row;
+      this.areaCodesService.updateAreaCode(AreaCodeId!, sanitizedRow).subscribe({
+        next: () => {
+          this.snackbarService.showSuccess('Updated successfully!');
+          row.isEdited = false;
+          delete row.originalAreaCode;
+          this.gridApi.applyTransaction({ update: [row] });
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
     }
   }
 
+  // Style new rows visually
   getRowClass = (params: any) => {
-    // If AreaCodeId is not present, it's a newly added temporary row
     return !params.data.AreaCodeId ? 'temporary-row' : '';
   };
 
+  // Soft delete handler
   softDeleteProvider(areaCode: AreaCodes): void {
     const updatedAreaCode = { ...areaCode, isDeleted: true };
     this.store.dispatch(new SoftDeleteAreaCode(updatedAreaCode));
-    this.snackbarService.showSuccess('Removed Successfully')
+    this.snackbarService.showSuccess('Removed Successfully');
   }
 
+  // Add new row locally
   addRow(): void {
     const newRow: AreaCodes = {
-      // AreaCodeId: 0,
       AreaCode: '',
       Description: '',
       Type: 'Landline',
       IsActive: true,
-
-      // isDeleted: false,
     };
     this.store.dispatch(new AddAreaCodeRowLocally(newRow));
   }
 
-  getContextMenuItems: GetContextMenuItems = (
-    params: GetContextMenuItemsParams
-  ) => {
+  // Context menu for right-click actions
+  getContextMenuItems: GetContextMenuItems = (params: GetContextMenuItemsParams) => {
     const addRow = {
       name: 'Add Row',
       action: () => this.addRow(),

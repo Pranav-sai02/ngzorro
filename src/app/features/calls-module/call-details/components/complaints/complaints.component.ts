@@ -4,10 +4,11 @@ import { Component } from '@angular/core';
   selector: 'app-complaints',
   standalone: false,
   templateUrl: './complaints.component.html',
-  styleUrl: './complaints.component.css'
+  styleUrl: './complaints.component.css',
 })
 export class ComplaintsComponent {
-printPage():void {
-  window.print();
-}
+  // Trigger browser print dialog
+  printPage(): void {
+    window.print();
+  }
 }

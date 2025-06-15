@@ -4,35 +4,37 @@ import { Component } from '@angular/core';
   selector: 'app-validation',
   standalone: false,
   templateUrl: './validation.component.html',
-  styleUrl: './validation.component.css'
+  styleUrl: './validation.component.css',
 })
 export class ValidationComponent {
-validation = {
-  policyNumber: '',
-  firstName: '',
-  lastName: '',
-  idNumber: '',
-  relationship: '',
-  fusionDb: false,
-  websiteVerification: false,
-  memberCertificate: false,
-  telephonically: false,
-  otherMethod: '',
-  validationMethod: '',
-  benefitValid: ''
-};
+  // Current validation form data
+  validation = {
+    policyNumber: '',
+    firstName: '',
+    lastName: '',
+    idNumber: '',
+    relationship: '',
+    fusionDb: false,
+    websiteVerification: false,
+    memberCertificate: false,
+    telephonically: false,
+    otherMethod: '',
+    validationMethod: '',
+    benefitValid: '',
+  };
 
-previousValidation = {
-  method: '',
-  date: '',
-  validatedBy: '',
-  benefitValid: false
-};
+  // Holds last validation summary
+  previousValidation = {
+    method: '',
+    date: '',
+    validatedBy: '',
+    benefitValid: false,
+  };
 
-
-
-  onValidate() {
+  // Generate validation summary and store it in previousValidation
+  onValidate(): void {
     const methods = [];
+
     if (this.validation.fusionDb) methods.push('Fusion Database');
     if (this.validation.websiteVerification) methods.push('Website Verification');
     if (this.validation.memberCertificate) methods.push('Member Certificate');
@@ -42,8 +44,8 @@ previousValidation = {
     this.previousValidation = {
       method: methods.join(', ') || 'None',
       date: new Date().toLocaleDateString(),
-      validatedBy: 'Admin',
-      benefitValid: this.validation.benefitValid === 'yes'
+      validatedBy: 'Admin', // Static for now; can be dynamic in future
+      benefitValid: this.validation.benefitValid === 'yes',
     };
   }
 }

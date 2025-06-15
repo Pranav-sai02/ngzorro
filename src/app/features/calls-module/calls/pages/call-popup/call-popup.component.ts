@@ -7,18 +7,24 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrl: './call-popup.component.css'
 })
 export class CallPopupComponent {
-showPopup = false;
- @Output() close = new EventEmitter<void>();
+  // Controls the popup visibility
+  showPopup = false;
 
-  onClose() {
-    this.close.emit(); // 🔁 send close signal to parent
+  // Emits event to notify parent to close the popup
+  @Output() close = new EventEmitter<void>();
+
+  // Called when close button is clicked inside the popup
+  onClose(): void {
+    this.close.emit();
   }
 
-  openPopup() {
+  // Opens the popup
+  openPopup(): void {
     this.showPopup = true;
   }
 
-  closePopup() {
+  // Closes the popup
+  closePopup(): void {
     this.showPopup = false;
   }
 }

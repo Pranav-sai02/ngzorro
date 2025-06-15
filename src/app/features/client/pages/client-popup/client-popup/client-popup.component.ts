@@ -1,10 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ClientService } from '../../../services/client-service/client.service';
 import { Client } from '../../../models/Client';
@@ -21,38 +16,43 @@ import {
   styleUrl: './client-popup.component.css',
 })
 export class ClientPopupComponent {
+  // intl-tel-input settings
   separateDialCode = false;
   SearchCountryField = SearchCountryField;
   CountryISO = CountryISO;
   PhoneNumberFormat = PhoneNumberFormat;
-  preferredCountries: CountryISO[] = [
-    CountryISO.UnitedStates,
-    CountryISO.UnitedKingdom,
-  ];
+  preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+
+  // Form for phone number validation
   phoneForm = new FormGroup({
     phone: new FormControl(undefined, [Validators.required]),
   });
 
-  changePreferredCountries() {
-    this.preferredCountries = [CountryISO.India, CountryISO.Canada];
-  }
-  // phoneForm!: FormGroup;
+  // Optional search fields for country input
   searchFields = [
     SearchCountryField.Name,
     SearchCountryField.DialCode,
     SearchCountryField.Iso2,
   ];
 
-  showSuccess = false;
+  // Main client form
   clientForm!: FormGroup;
-  searchCountryField = SearchCountryField;
 
+  // Image preview properties
   ProfileImage: String | ArrayBuffer | null = null;
-  defaultImage =
-    'https://static.vecteezy.com/system/resources/thumbnails/023/329/367/small/beautiful-image-in-nature-of-monarch-butterfly-on-lantana-flower-generative-ai-photo.jpg';
+  defaultImage = 'https://static.vecteezy.com/...';
 
+  // Form control to toggle image upload options
+  toggleOptions: boolean = false;
+
+  // Output event to close the popup
   @Output() close = new EventEmitter<void>();
+
+  // Form for additional user details (used in onSave logic)
   userForm!: FormGroup;
+
+  // Flag for displaying success message
+  showSuccess = false;
 
   constructor(
     private fb: FormBuilder,
@@ -61,6 +61,7 @@ export class ClientPopupComponent {
   ) {}
 
   ngOnInit(): void {
+    // Initialize form with validation rules
     this.clientForm = this.fb.group({
       CompanyName: ['', Validators.required],
       ClientGroup: ['', Validators.required],
@@ -71,27 +72,24 @@ export class ClientPopupComponent {
       Mobile: [undefined, [Validators.required]],
       WebURL: [
         '',
-        Validators.pattern(
-          /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-])\/?$/i
-        ),
+        Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-])\/?$/i),
       ],
       CompanyLogo: [''],
       IsActive: [true],
     });
   }
-  //  changePassword() {
-  //   alert('Change password cliked');
-  //  }
 
+  // Close popup form
   closeForm() {
     this.close.emit();
   }
+
+  // Cancel and close the popup
   onCancel(): void {
     this.close.emit();
   }
 
-  toggleOptions: boolean = false;
-
+  // Handle image file upload
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
@@ -104,36 +102,40 @@ export class ClientPopupComponent {
     }
   }
 
+  // Remove selected image
   removeImage() {
     this.ProfileImage = '';
     this.toggleOptions = false;
   }
 
-  // Stub for camera functionality (can be implemented via plugins if needed)
+  // Stub for native camera integration (can be replaced with plugin)
   openCamera() {
     alert('Camera functionality can be implemented via native device plugins.');
     this.toggleOptions = false;
   }
 
+  // Clear value of any form field in userForm
   clearField(controlName: string): void {
     this.userForm.get(controlName)?.setValue('');
   }
 
+  // Placeholder for future edit functionality
   onEditClick(): void {
-    // Your logic here. For now, just log a message.
     console.log('Edit button clicked');
   }
 
+  // Save client form data
   onSave() {
     if (this.userForm.valid) {
       const formValues = this.userForm.value;
 
+      // Build client object to submit
       const client: Client = {
-        ClientId: 0, // Or undefined/null if it's created by backend
+        ClientId: 0,
         ClientGroupId: 0,
-        ClientGroup: {} as any, // Set proper object if needed
+        ClientGroup: {} as any,
         AreaCodeId: 0,
-        AreaCodes: {} as any, // Set proper object if needed
+        AreaCodes: {} as any,
         ClientName: formValues.CompanyName,
         ClaimsManager: '',
         Address: formValues.Address,
@@ -175,6 +177,7 @@ export class ClientPopupComponent {
         EnableVoucherExportOnDeathClaim: false,
       };
 
+      // Submit client creation request
       this.clientService.createClient(client).subscribe({
         next: () => {
           this.toastr.success('User saved successfully!', 'Success');
@@ -188,45 +191,37 @@ export class ClientPopupComponent {
           const errors = err?.error?.errors;
           if (errors) {
             const messages = Object.values(errors).flat().join('<br/>');
-            this.toastr.error(messages, 'Validation Error', {
-              enableHtml: true,
-            });
+            this.toastr.error(messages, 'Validation Error', { enableHtml: true });
           } else {
-            this.toastr.error(
-              err?.error?.message || 'Failed to save user',
-              'Error'
-            );
+            this.toastr.error(err?.error?.message || 'Failed to save user', 'Error');
           }
         },
       });
     } else {
+      // Mark all fields as touched to show validation
       this.userForm.markAllAsTouched();
 
       const errors: string[] = [];
-      const nameControl = this.userForm.get('Name'); // Updated to Name
+
+      // Manual validation with custom messages
+      const nameControl = this.userForm.get('Name');
       const emailControl = this.userForm.get('UserEmail');
       const mobileNumberControl = this.userForm.get('MobileNumber');
       const phoneNumberControl = this.userForm.get('PhoneNumber');
 
-      if (nameControl?.hasError('required')) {
-        errors.push('Name is required.');
-      }
-      if (emailControl?.hasError('required')) {
-        errors.push('Email is required.');
-      } else if (emailControl?.hasError('email')) {
-        errors.push('Please enter a valid email address.');
-      }
-      if (mobileNumberControl?.hasError('required')) {
-        errors.push('Mobile Number is required.');
-      } else if (mobileNumberControl?.hasError('pattern')) {
-        errors.push('Please enter a valid 10-digit mobile number.');
-      }
-      if (phoneNumberControl?.hasError('pattern')) {
-        errors.push('Please enter a valid 10-digit phone number.');
-      }
+      if (nameControl?.hasError('required')) errors.push('Name is required.');
+      if (emailControl?.hasError('required')) errors.push('Email is required.');
+      else if (emailControl?.hasError('email')) errors.push('Please enter a valid email address.');
+      if (mobileNumberControl?.hasError('required')) errors.push('Mobile Number is required.');
+      else if (mobileNumberControl?.hasError('pattern')) errors.push('Please enter a valid 10-digit mobile number.');
+      if (phoneNumberControl?.hasError('pattern')) errors.push('Please enter a valid 10-digit phone number.');
 
-      const errorMessage = errors.join('<br/>');
-      this.toastr.error(errorMessage, 'Validation Error', { enableHtml: true });
+      this.toastr.error(errors.join('<br/>'), 'Validation Error', { enableHtml: true });
     }
+  }
+
+  // Update preferred countries for intl-tel-input dropdown
+  changePreferredCountries() {
+    this.preferredCountries = [CountryISO.India, CountryISO.Canada];
   }
 }

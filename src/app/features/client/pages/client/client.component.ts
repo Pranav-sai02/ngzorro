@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from '../../models/Client';
-import { ActiveToggleRendererComponent } from '../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
-import { SoftDeleteButtonRendererComponent } from '../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
 import { ColDef, GridApi, GridOptions } from 'ag-grid-community';
+import { Client } from '../../models/Client';
 import { ClientService } from '../../services/client-service/client.service';
 import { SnackbarService } from '../../../../core/services/snackbar/snackbar.service';
+import { ActiveToggleRendererComponent } from '../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
+import { SoftDeleteButtonRendererComponent } from '../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
 
 @Component({
   selector: 'app-client',
@@ -13,41 +13,52 @@ import { SnackbarService } from '../../../../core/services/snackbar/snackbar.ser
   styleUrl: './client.component.css',
 })
 export class ClientComponent implements OnInit {
+  // === AG Grid Renderer References ===
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
   softDeleteRenderer = SoftDeleteButtonRendererComponent;
 
-  /* === Class Members === */
-  selectedUser: Client | null = null; // Reference to the selected client for popup
-  editedUser: Client = {} as Client; // Detached copy for editing
-  toggleOptions = false; // Flag to toggle options in popup
-  saving = false; // Spinner flag for saving state
-  Client: Client[] = []; // Array to hold client data
-  gridApi!: GridApi; // AG Grid API
+  // === Class Properties ===
+  Client: Client[] = [];
+  selectedUser: Client | null = null;
+  editedUser: Client = {} as Client;
+  toggleOptions = false;
+  saving = false;
+  gridApi!: GridApi;
 
-  /* === AG-Grid Options === */
+  // === AG Grid Config ===
   gridOptions: GridOptions = {
     context: { componentParent: this },
-    getRowId: (params) => params.data.id?.toString() ?? params.data.name, // Use 'name' as fallback if 'id' is unavailable
+    getRowId: (params) => params.data.id?.toString() ?? params.data.name,
     pagination: true,
     paginationPageSize: 20,
     domLayout: 'autoHeight',
     animateRows: true,
     rowSelection: 'single',
     rowClassRules: {
-      'temporary-row': (params) => params.data?.Name?.includes('(INACTIVE)'), // Highlight inactive rows
+      'temporary-row': (params) => params.data?.Name?.includes('(INACTIVE)'),
     },
   };
 
+  defaultColDef: ColDef = {
+    sortable: true,
+    filter: true,
+    resizable: true,
+  };
+
+  components = {
+    activeToggleRenderer: ActiveToggleRendererComponent,
+  };
+
+  // === AG Grid Column Definitions ===
   columnDefs: ColDef<Client>[] = [
     {
-      field: 'ClientName', // Match field names with Client model
+      field: 'ClientName',
       headerName: 'Name',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
       sortable: true,
-
       filter: 'agTextColumnFilter',
     },
     {
@@ -107,7 +118,6 @@ export class ClientComponent implements OnInit {
       },
       headerClass: 'bold-header',
       sortable: true,
-
       filter: true,
     },
     {
@@ -126,27 +136,17 @@ export class ClientComponent implements OnInit {
     },
   ];
 
- 
+  constructor(
+    private clientService: ClientService,
+    private snackbarService: SnackbarService
+  ) {}
 
-  defaultColDef: ColDef = {
-    sortable: true,
-    filter: true,
-    resizable: true,
-  };
-
-  // Custom components for AG Grid
-  components = {
-    activeToggleRenderer: ActiveToggleRendererComponent,
-  };
-
-  constructor(private clientService: ClientService, private snackbarService:SnackbarService) {}
-
-  /* === Lifecycle === */
+  // === Lifecycle Hook ===
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  /* === Grid Handlers === */
+  // === Grid Events ===
   onGridReady(params: any): void {
     this.gridApi = params.api;
     this.resizeGrid();
@@ -158,6 +158,15 @@ export class ClientComponent implements OnInit {
     }
   }
 
+  onExport(): void {
+    this.gridApi.exportDataAsCsv({
+      fileName: 'clients.csv',
+      columnSeparator: ',',
+      allColumns: true,
+    });
+  }
+
+  // === Data Load ===
   loadUsers(): void {
     this.clientService.getClients().subscribe({
       next: (data: Client[]) => {
@@ -170,18 +179,10 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  onExport(): void {
-    this.gridApi.exportDataAsCsv({
-      fileName: 'clients.csv',
-      columnSeparator: ',',
-      allColumns: true,
-    });
-  }
-
-  /* === Popup Handlers === */
+  // === Popup Handlers ===
   openPopup(user: Client): void {
     this.selectedUser = user;
-    this.editedUser = { ...user }; // Shallow copy for editing
+    this.editedUser = { ...user };
     this.toggleOptions = false;
   }
 
@@ -190,9 +191,10 @@ export class ClientComponent implements OnInit {
     this.editedUser = {} as Client;
   }
 
+  // === Grid Actions ===
   onActiveToggleChange(params: any): void {
     const updatedUser = params.data as Client;
-    // this.saveUserToggleStatus(updatedUser);
+    // Placeholder: handle active status update
     params.api.refreshCells({ rowNodes: [params.node], force: true });
   }
 
@@ -202,16 +204,9 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  softDelete(Client: Client): void {
-    // Mark the item as deleted (optional if you want to preserve the flag)
-    Client.IsDeleted = true;
-
-    // Remove it from rowData
-    this.Client = this.Client.filter(group => group.ClientId !== Client.ClientId);
-
-    // Optionally update the grid manually if you want
-    // this.gridApi.setRowData(this.rowData);
-
+  softDelete(client: Client): void {
+    client.IsDeleted = true;
+    this.Client = this.Client.filter(c => c.ClientId !== client.ClientId);
     this.snackbarService.showSuccess('Removed successfully');
   }
 }

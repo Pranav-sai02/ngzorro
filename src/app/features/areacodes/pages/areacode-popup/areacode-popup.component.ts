@@ -10,12 +10,21 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './areacode-popup.component.css',
 })
 export class AreacodePopupComponent {
+  // Form group for the area code form
   areaForm: FormGroup;
 
+  // Emit when the popup should close
   @Output() close = new EventEmitter<void>();
+
+  // Emit when form is submitted successfully
   @Output() formSubmit = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private areaCodeService: AreaCodesService,private toastr: ToastrService) {
+  constructor(
+    private fb: FormBuilder,
+    private areaCodeService: AreaCodesService,
+    private toastr: ToastrService
+  ) {
+    // Initialize the form
     this.areaForm = this.fb.group({
       areaCode: ['', Validators.required],
       description: [''],
@@ -24,8 +33,9 @@ export class AreacodePopupComponent {
     });
   }
 
+  // Handle form submission
   onSubmit() {
-  if (this.areaForm.invalid) {
+    if (this.areaForm.invalid) {
       this.areaForm.markAllAsTouched();
       this.toastr.error('Please fill in required fields.', 'Form Invalid');
       return;
@@ -46,15 +56,18 @@ export class AreacodePopupComponent {
     });
   }
 
+  // Cancel and close the popup
   onCancel() {
     this.close.emit();
   }
 
+  // Close the popup
   onClose() {
     this.close.emit();
   }
 
-   get f() {
+  // Expose form controls for easy access in template
+  get f() {
     return this.areaForm.controls;
   }
 }
