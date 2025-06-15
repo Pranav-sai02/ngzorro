@@ -18,7 +18,7 @@ import { SnackbarService } from '../../../../../core/services/snackbar/snackbar.
   styleUrl: './services-page.component.css',
 })
 export class ServicesPageComponent {
-  rows: ServicesPage[] = [];
+  ServicePage: ServicesPage[] = [];
   private gridApi!: GridApi;
 
   showPopup = false; // controls popup visibility
@@ -153,13 +153,13 @@ export class ServicesPageComponent {
   };
 
   constructor(
-    private spSvc: ServicesPageService,
+    private ServicesPageService: ServicesPageService,
     private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
-    this.spSvc.getAll().subscribe((data) => {
-      this.rows = data;
+    this.ServicesPageService.getAll().subscribe((data) => {
+      this.ServicePage = data;
       setTimeout(() => this.autoSizeColumnsBasedOnContent(), 0);
     });
   }
@@ -228,12 +228,12 @@ export class ServicesPageComponent {
 
   // Handle form submit from popup: update the grid data
   onServiceFormSubmit(updatedService: ServicesPage): void {
-    const index = this.rows.findIndex(
+    const index = this.ServicePage.findIndex(
       (s) => s.ServiceId === updatedService.ServiceId
     );
     if (index > -1) {
-      this.rows[index] = updatedService;
-      this.rows = [...this.rows]; // update reference to trigger Angular change detection
+      this.ServicePage[index] = updatedService;
+      this.ServicePage = [...this.ServicePage]; // update reference to trigger Angular change detection
       this.gridApi.refreshCells(); // optionally refresh grid cells
     }
     this.closePopup();
@@ -244,7 +244,7 @@ export class ServicesPageComponent {
     ServicesPage.IsDeleted = true;
 
     // Remove it from rowData
-    this.rows = this.rows.filter(
+    this.ServicePage = this.ServicePage.filter(
       (group) => group.ServiceId !== ServicesPage.ServiceId
     );
 

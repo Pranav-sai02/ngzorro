@@ -21,7 +21,7 @@ export class ClientComponent implements OnInit {
   editedUser: Client = {} as Client; // Detached copy for editing
   toggleOptions = false; // Flag to toggle options in popup
   saving = false; // Spinner flag for saving state
-  users: Client[] = []; // Array to hold client data
+  Client: Client[] = []; // Array to hold client data
   gridApi!: GridApi; // AG Grid API
 
   /* === AG-Grid Options === */
@@ -161,7 +161,7 @@ export class ClientComponent implements OnInit {
   loadUsers(): void {
     this.clientService.getClients().subscribe({
       next: (data: Client[]) => {
-        this.users = data;
+        this.Client = data;
         this.resizeGrid();
       },
       error: (err: any) => {
@@ -207,7 +207,7 @@ export class ClientComponent implements OnInit {
     Client.IsDeleted = true;
 
     // Remove it from rowData
-    this.users = this.users.filter(group => group.ClientId !== Client.ClientId);
+    this.Client = this.Client.filter(group => group.ClientId !== Client.ClientId);
 
     // Optionally update the grid manually if you want
     // this.gridApi.setRowData(this.rowData);

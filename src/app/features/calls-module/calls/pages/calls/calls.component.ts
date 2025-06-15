@@ -16,7 +16,7 @@ import { CallDataService } from '../../services/call-data-service/call-data.serv
 export class CallsComponent implements OnInit {
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
 
-  call: Call[] = [];
+  Cases: Call[] = [];
   gridApi!: GridApi;
 
   columnDefs: ColDef<Call>[] = [
@@ -139,7 +139,7 @@ export class CallsComponent implements OnInit {
 
   loadUsers(): void {
     this.callService.getUsers().subscribe((data) => {
-      this.call = data;
+      this.Cases = data;
       this.resizeGrid();
     });
   }

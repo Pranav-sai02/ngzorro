@@ -36,7 +36,7 @@ export class ClientGroupComponent implements OnInit {
 
   gridApi!: GridApi;
 
-  rowData: ClientGroup[] = [];
+  ClientGroup: ClientGroup[] = [];
   columnDefs: ColDef<ClientGroup>[] = [
     {
       field: 'Name',
@@ -147,7 +147,7 @@ export class ClientGroupComponent implements OnInit {
     this.store.dispatch(new LoadClientGroups());
     this.store.select(ClientGroupState.getClientGroups).subscribe((data) => {
       console.log('From select:', data);
-      this.rowData = data;
+      this.ClientGroup = data;
     });
   }
 
@@ -159,13 +159,13 @@ export class ClientGroupComponent implements OnInit {
     const updatedRow = event.data;
 
     // 🔍 Find original row reference in rowData
-    const index = this.rowData.findIndex(
+    const index = this.ClientGroup.findIndex(
       (r) => r === updatedRow || r.ClientGroupId === updatedRow.ClientGroupId
     );
 
     if (index > -1) {
-      this.rowData[index].IsEdited = true; // ✅ Update actual reference
-      this.gridApi.applyTransaction({ update: [this.rowData[index]] });
+      this.ClientGroup[index].IsEdited = true; // ✅ Update actual reference
+      this.gridApi.applyTransaction({ update: [this.ClientGroup[index]] });
     }
   }
 
@@ -231,7 +231,7 @@ export class ClientGroupComponent implements OnInit {
   softDeleteProvider(clientGroup: ClientGroup): void {
     // const updatedAreaCode = { ...areaCode, isDeleted: true };
 
-    this.rowData = this.rowData.filter(
+    this.ClientGroup = this.ClientGroup.filter(
       (group) => group.ClientGroupId !== clientGroup.ClientGroupId
     );
 

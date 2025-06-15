@@ -32,7 +32,7 @@ export class AreaCodesComponent implements OnInit {
   SoftDeleteRendererComponent = SoftDeleteButtonRendererComponent;
   gridApi!: GridApi;
 
-  rowData: AreaCodes[] = [];
+  AreaCode: AreaCodes[] = [];
 
   columnDefs: ColDef<AreaCodes>[] = [
     {
@@ -182,7 +182,7 @@ export class AreaCodesComponent implements OnInit {
     this.store.dispatch(new LoadAreaCodes());
     this.store.select(AreaCodesState.getAreaCodes).subscribe((data) => {
       console.log('From select:', data);
-      this.rowData = data;
+      this.AreaCode = data;
     });
   }
 

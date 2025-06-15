@@ -15,7 +15,7 @@ import { SnackbarService } from '../../../../../core/services/snackbar/snackbar.
 export class ServiceProvidersTypesComponent implements OnInit {
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
   SoftDeleteRendererComponent = SoftDeleteButtonRendererComponent;
-  rows: ServiceProviderTypes[] = [];
+  ServiceProvidersTypes: ServiceProviderTypes[] = [];
   private gridApi!: GridApi;
 
   columnDefs: ColDef<ServiceProviderTypes>[] = [
@@ -74,7 +74,7 @@ export class ServiceProvidersTypesComponent implements OnInit {
   constructor(private spSvc: ServiceProviderTypesService, private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
-    this.spSvc.getAll().subscribe((data) => (this.rows = data));
+    this.spSvc.getAll().subscribe((data) => (this.ServiceProvidersTypes = data));
   }
 
   onGridReady(e: GridReadyEvent) {
@@ -87,10 +87,10 @@ export class ServiceProvidersTypesComponent implements OnInit {
   }
   softDelete(row: ServiceProviderTypes): void {
     // Remove from UI
-    this.rows = this.rows.filter(
+    this.ServiceProvidersTypes = this.ServiceProvidersTypes.filter(
       r => r.ServiceProvideCode !== row.ServiceProvideCode
     );
-    this.rows = [...this.rows]; // trigger Angular UI update
+    this.ServiceProvidersTypes = [...this.ServiceProvidersTypes]; // trigger Angular UI update
 
     // Show success toast
     this.snackbarService.showSuccess('Removed successfully');
