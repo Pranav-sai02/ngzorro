@@ -14,12 +14,11 @@ export class BreadcrumbComponent {
   showPopup: boolean = false;
 
   private hideButtonRoutes: string[] = [
-  '/area-codes',
-  '/service-provider/types',
-  '/client-group',
-  '/cases/case-details',
-  
-];
+    '/area-codes',
+    '/service-provider/types',
+    '/client-group',
+    '/cases/case-details',
+  ];
 
   // ✅ Centralized popup configuration
   // private popupMap: { [key: string]: string } = {
@@ -43,7 +42,7 @@ export class BreadcrumbComponent {
         this.currentRoute = event.urlAfterRedirects;
         this.updateBreadcrumb();
       });
-       this.currentRoute = this.router.url; // Initialize currentRoute
+    this.currentRoute = this.router.url; // Initialize currentRoute
   }
 
   // updateBreadcrumb(): void {
@@ -96,15 +95,17 @@ export class BreadcrumbComponent {
       return 'service-provider-types';
     if (this.currentRoute.includes('/service-provider/services'))
       return 'services';
-     if (this.currentRoute.includes('/client')) return 'client';
+    if (this.currentRoute.includes('/client')) return 'client';
+    if (this.currentRoute.includes('/cases')) return 'new';
+
     return null;
   }
 
   get showNewButton(): boolean {
-  return !this.hideButtonRoutes.some(route =>
-    this.currentRoute.includes(route)
-  );
-}
+    return !this.hideButtonRoutes.some((route) =>
+      this.currentRoute.includes(route)
+    );
+  }
   // ✅ Dynamically determine which popup to show based on route
   // get activePopup(): string | null {
   //   return (

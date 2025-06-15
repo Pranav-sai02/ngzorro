@@ -1,26 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { SOUTH_AFRICAN_LANGUAGES } from '../../../../../constants/south-african-languages';
+import { Call } from '../../../calls/models/Call';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import { ActivatedRoute } from '@angular/router';
+import { ClientService } from '../../../../client/services/client-service/client.service';
+import { CallDataService } from '../../../calls/services/call-data-service/call-data.service';
 
 @Component({
   selector: 'app-caller-details',
   standalone: false,
   templateUrl: './caller-details.component.html',
-  styleUrl: './caller-details.component.css'
+  styleUrl: './caller-details.component.css',
 })
 export class CallerDetailsComponent implements OnInit {
+
+
+   languages = SOUTH_AFRICAN_LANGUAGES;
+   caseRef!: string;
+   callerName: string = '';
+
   setActiveTab(tab: string): void {
-  this.activeTab = tab;
-}
+    this.activeTab = tab;
+  }
   activeTab: string = 'caller';
-   callerForm!: FormGroup;
+  callerForm!: FormGroup;
+  caseData: Call | null = null;
 
-  clients: string[] = ['Client A', 'Client B', 'Client C'];
+  client: string ='';
   serviceTypes: string[] = ['Service A', 'Service B', 'Service C'];
-  languages: string[] = ['English', 'Afrikaans', 'Zulu', 'Xhosa'];
+  agents: any;
+  callOpenDates: any;
+  today: any;
 
-  constructor(private fb: FormBuilder) {}
+  separateDialCode = false;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+  preferredCountries: CountryISO[] = [
+    CountryISO.SouthAfrica,
+    CountryISO.UnitedStates,
+  ];
+  phoneForm = new FormGroup({
+    phone: new FormControl(undefined, [Validators.required]),
+  });
+
+  changePreferredCountries() {
+    this.preferredCountries = [CountryISO.India, CountryISO.Canada];
+  }
+  // phoneForm!: FormGroup;
+  searchFields = [
+    SearchCountryField.Name,
+    SearchCountryField.DialCode,
+    SearchCountryField.Iso2,
+  ];
+
+  
+
+  constructor(private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private callDataService: CallDataService,
+    private clientService: ClientService) {}
 
   ngOnInit(): void {
+
+     this.route.queryParamMap.subscribe((params) => {
+      this.caseRef = params.get('callRef') ?? '';
+      this.callerName = params.get('callerName') ?? '';
+      this.client = params.get('client') ?? '';
+    });
     this.callerForm = this.fb.group({
       client: [''],
       serviceType: [''],
@@ -36,8 +84,12 @@ export class CallerDetailsComponent implements OnInit {
     });
   }
   onSubmit(): void {
-  if (this.callerForm.valid) {
-    console.log(this.callerForm.value);
+    if (this.callerForm.valid) {
+      console.log(this.callerForm.value);
+    }
   }
-}
+  
+  getYearRange() {
+    throw new Error('Method not implemented.');
+  }
 }

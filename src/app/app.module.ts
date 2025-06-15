@@ -8,7 +8,7 @@ import {
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule, provideHttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { AgGridModule } from 'ag-grid-angular';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { SidebarComponent } from './layouts/sidebar/pages/sidebar/sidebar.component';
@@ -41,14 +41,11 @@ import { ClientGroupComponent } from './features/client/pages/client-groups/clie
 import { ClientGroupState } from './features/client/client-group-state/client-group.state';
 import { ClientComponent } from './features/client/pages/client/client.component';
 import { ClientPopupComponent } from './features/client/pages/client-popup/client-popup/client-popup.component';
-import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
-import { registerLocaleData } from '@angular/common';
-import en from '@angular/common/locales/en';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
-
-registerLocaleData(en);
-
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ErrorInterceptor } from './core/interceptors/error.interceptor';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CallsModuleModule } from "./features/calls-module/calls-module.module";
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
@@ -75,7 +72,6 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
     ClientComponent,
     ClientGroupComponent,
     ClientPopupComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -88,14 +84,21 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
     BrowserAnimationsModule,
     EditorModule,
     ToastrModule.forRoot({
-      timeOut: 3000,
-      positionClass: 'toast-top-right',
-      preventDuplicates: true,
+        timeOut: 3000,
+        positionClass: 'toast-top-right',
+        preventDuplicates: true,
     }),
     ServiceProviderModule,
+    NgxIntlTelInputModule,
     NgxsModule.forRoot([AreaCodesState, ClientGroupState]),
-  ],
-  providers: [provideClientHydration(withEventReplay()), provideNzI18n(en_US), provideAnimationsAsync(), provideHttpClient()],
+    MatSnackBarModule,
+    CallsModuleModule
+],
+  providers: [provideClientHydration(withEventReplay()),{
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

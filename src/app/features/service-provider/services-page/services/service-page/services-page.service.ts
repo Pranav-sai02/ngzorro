@@ -35,4 +35,8 @@ export class ServicesPageService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  softDelete(id: number): Observable<any> {
+    return this.http.patch(`${this.baseUrl}/${id}`, { IsDeleted: true });
+  }
 }

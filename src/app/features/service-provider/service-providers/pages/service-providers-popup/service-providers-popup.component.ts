@@ -216,7 +216,7 @@ toggleOptions = false;
 
   } else {
     this.providerForm.markAllAsTouched();
-    this.toastr.error('Please fill in all required fields.', 'Form Incomplete');
+  //  this.toastr.error('Please fill in all required fields.', 'Form Incomplete');
   }
   }
 

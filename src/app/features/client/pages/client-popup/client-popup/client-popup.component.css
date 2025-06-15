@@ -9,6 +9,9 @@
 form {
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  margin-top: 20px;
+  scrollbar-width: none;
 }
 
 .form-row {
@@ -61,7 +64,7 @@ input[type="email"] {
 
 button {
   width: 120px;
-  background-color: #05B9BC;
+  background-color: #05b9bc;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -97,6 +100,7 @@ button {
   width: 90%;
   max-width: 800px;
   position: relative;
+  height: 90%;
 }
 
 .close-btn {
@@ -164,7 +168,7 @@ button {
   font-weight: bold;
   margin-bottom: 20px;
   text-align: left;
-  color: #05B9BC;
+  color: #05b9bc;
 }
 
 input::placeholder,
@@ -172,7 +176,10 @@ textarea::placeholder {
   color: #b0b0b0;
   opacity: 1;
 }
-
+.client-form-country{
+  display: flex;
+  justify-content: space-between;
+}
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -220,7 +227,7 @@ textarea {
   font-size: 24px;
   font-weight: bold;
   text-align: left;
-  color: #05B9BC;
+  color: #05b9bc;
   flex: 1;
   margin: 0;
 }
@@ -265,3 +272,52 @@ textarea {
 .edit-btn:hover {
   background-color: #0097a7;
 } */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+::ng-deep .iti {
+  display: flex;
+}
+::ng-deep .iti__arrow {
+  /* margin-left: 20px; */
+}
+::ng-deep .iti input.iti__tel-input,
+.iti input.iti__tel-input[type="text"],
+.iti input.iti__tel-input[type="tel"] {
+  width: 228px;
+  height: 43px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+::ng-deep .iti__flag-container.open + input {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+::ng-deep .iti__selected-flag.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  /* background-color: lightgrey; */
+  /* border: 1px solid #ccc; */
+
+  justify-content: center;
+  height: 43px;
+  padding: 10px;
+  border-right: 1px solid #ccc;
+}
+::ng-deep .iti__country-list {
+  height: 130px;
+  list-style: none;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  
+}
+
+
+
+::ng-deep .iti__dropdown-content[_ngcontent-ng-c4036060811] {
+    border: 1px solid #ccc;
+    width: 230px !important; ;
+}

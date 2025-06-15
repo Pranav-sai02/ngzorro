@@ -34,7 +34,7 @@ export class UserpopupComponent implements OnInit {
       PhoneNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       MobileNumber: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       EmployeeId: [''],
-      IsActive: [true],
+      IsActive: [false],
       IsAdmin: [false],
     });
   }

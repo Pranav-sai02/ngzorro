@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './complaints.component.css'
 })
 export class ComplaintsComponent {
-
+printPage():void {
+  window.print();
+}
 }

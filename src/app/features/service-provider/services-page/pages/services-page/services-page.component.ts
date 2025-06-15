@@ -9,6 +9,7 @@ import { ServicesPage } from '../../models/Services-page';
 import { ServicesPageService } from '../../services/service-page/services-page.service';
 import { ActiveToggleRendererComponent } from '../../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
 import { SoftDeleteButtonRendererComponent } from '../../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
+import { SnackbarService } from '../../../../../core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-services-page',
@@ -20,8 +21,8 @@ export class ServicesPageComponent {
   rows: ServicesPage[] = [];
   private gridApi!: GridApi;
 
-  showPopup = false;                    // controls popup visibility
-  selectedService: ServicesPage | null = null;  // currently selected service for popup
+  showPopup = false; // controls popup visibility
+  selectedService: ServicesPage | null = null; // currently selected service for popup
 
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
   SoftDeleteRendererComponent = SoftDeleteButtonRendererComponent;
@@ -41,10 +42,9 @@ export class ServicesPageComponent {
       headerName: 'Service Type',
       sortable: true,
       flex: 1,
-      minWidth:120,
-      cellStyle: { 
-        borderRight: '1px solid #ccc' ,
-
+      minWidth: 120,
+      cellStyle: {
+        borderRight: '1px solid #ccc',
       },
       headerClass: 'bold-header',
     },
@@ -129,7 +129,7 @@ export class ServicesPageComponent {
       headerClass: 'bold-header',
     },
 
-         {
+    {
       headerName: 'Delete',
       // field: 'isDeleted',
       flex: 1,
@@ -142,7 +142,7 @@ export class ServicesPageComponent {
         justifyContent: 'center',
       },
       headerClass: 'bold-header',
-      // onCellClicked: (params: any) => this.softDeleteProvider(params.data),
+      onCellClicked: (params: any) => this.softDelete(params.data),
     },
   ];
 
@@ -152,7 +152,10 @@ export class ServicesPageComponent {
     resizable: true,
   };
 
-  constructor(private spSvc: ServicesPageService) {}
+  constructor(
+    private spSvc: ServicesPageService,
+    private snackbarService: SnackbarService
+  ) {}
 
   ngOnInit(): void {
     this.spSvc.getAll().subscribe((data) => {
@@ -224,13 +227,30 @@ export class ServicesPageComponent {
   }
 
   // Handle form submit from popup: update the grid data
-onServiceFormSubmit(updatedService: ServicesPage): void {
-  const index = this.rows.findIndex(s => s.ServiceId === updatedService.ServiceId);
-  if (index > -1) {
-    this.rows[index] = updatedService;
-    this.rows = [...this.rows]; // update reference to trigger Angular change detection
-    this.gridApi.refreshCells(); // optionally refresh grid cells
+  onServiceFormSubmit(updatedService: ServicesPage): void {
+    const index = this.rows.findIndex(
+      (s) => s.ServiceId === updatedService.ServiceId
+    );
+    if (index > -1) {
+      this.rows[index] = updatedService;
+      this.rows = [...this.rows]; // update reference to trigger Angular change detection
+      this.gridApi.refreshCells(); // optionally refresh grid cells
+    }
+    this.closePopup();
   }
-  this.closePopup();
-}
+
+  softDelete(ServicesPage: ServicesPage): void {
+    // Mark the item as deleted (optional if you want to preserve the flag)
+    ServicesPage.IsDeleted = true;
+
+    // Remove it from rowData
+    this.rows = this.rows.filter(
+      (group) => group.ServiceId !== ServicesPage.ServiceId
+    );
+
+    // Optionally update the grid manually if you want
+    // this.gridApi.setRowData(this.rowData);
+
+    this.snackbarService.showSuccess('Removed successfully');
+  }
 }

@@ -16,9 +16,9 @@ export class UserService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-  updateUser(user: User): Observable<User> {
-    const url = `${this.apiUrl}?UserName=${encodeURIComponent(user.UserEmail)}`;
-    return this.http.put<User>(url, user);
+ updateUser(user: User): Observable<User> {
+   console.log('[UserService] Updating user:', user.UserEmail, 'IsDeleted:', user.IsDeleted);
+    return this.http.put<User>(`${this.apiUrl}/${user.Id}`, user);
   }
 
   createUser(user: User): Observable<User> {

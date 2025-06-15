@@ -1,8 +1,8 @@
 export interface ClientGroup {
-  ClientGroupId?:number;
+  ClientGroupId?: number;
   Name: string;
   IsActive: boolean;
- 
-   IsDeleted?: boolean;
+
+  IsDeleted?: boolean;
   IsEdited?: boolean;
 }

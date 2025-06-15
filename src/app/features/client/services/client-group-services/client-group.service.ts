@@ -11,6 +11,7 @@ export class ClientGroupService {
 
       
   private apiUrl = API_ENDPOINTS.CLIENTGROUP;
+  
 
   constructor(private http: HttpClient) {}
 

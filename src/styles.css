@@ -42,3 +42,24 @@
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.error-snackbar {
+  background-color: #e74c3c; /* red - error */
+  color: white;
+}
+
+.success-snackbar {
+  background-color: #2ecc71; /* green - success */
+  color: white;
+}
+
+/* styles.css */
+/* .toast-success {
+  background-color: #2ecc71 !important;
+  color: #fff;
+}
+.toast-error {
+  background-color: #e74c3c !important;
+  color: #fff;
+} */
+
+

@@ -37,3 +37,10 @@
   *ngIf="showPopup && activePopup === 'client'"
   (close)="closePopup()"
 ></app-client-popup>
+
+<app-call-popup
+  *ngIf="showPopup && activePopup === 'new'"
+  (close)="closePopup()"
+></app-call-popup>
+
+

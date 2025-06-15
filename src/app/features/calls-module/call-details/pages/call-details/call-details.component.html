@@ -1,56 +1,372 @@
-<nz-steps [nzCurrent]="current" size="small">
-  <nz-step nzTitle="Case Initiation"></nz-step>
-  <nz-step nzTitle="Evaluation"></nz-step>
-  <nz-step nzTitle="Ongoing"></nz-step>
-  <nz-step nzTitle="On Hold"></nz-step>
-  <nz-step nzTitle="Resolution"></nz-step>
-</nz-steps>
+<!-- <mat-stepper [linear]="true" #stepper [(selectedIndex)]="activeIndex">
+  <mat-step [completed]="completedSteps[0]">
+    <ng-template matStepLabel> <b>Case Initiation</b><br /> </ng-template>
+  </mat-step>
 
-<!-- <div class="steps-content">
-  {{ index }}
-</div> -->
+  <mat-step [completed]="completedSteps[1]">
+    <ng-template matStepLabel> <b>Evaluation</b><br /> </ng-template>
+  </mat-step>
 
-<div class="steps-action">
-  <button *ngIf="current > 0" nz-button nzType="default" (click)="pre()">Back</button>
-  <button *ngIf="current < 4" nz-button nzType="primary" (click)="next()">Next</button>
-  <button *ngIf="current === 4" nz-button nzType="default" (click)="done()">Done</button>
-</div>
+  <mat-step [completed]="completedSteps[2]">
+    <ng-template matStepLabel> <b>Ongoing</b><br /> </ng-template>
+  </mat-step>
 
+  <mat-step [completed]="completedSteps[3]">
+    <ng-template matStepLabel> <b>On Hold</b><br /> </ng-template>
+  </mat-step>
 
-<!-- call-details-component.html -->
+  <mat-step [completed]="completedSteps[4]">
+    <ng-template matStepLabel> <b>Resolution</b><br /> </ng-template>
+  </mat-step>
+</mat-stepper> -->
 
 <div class="caller-container">
-  <div class="call-ref">
-    <p>Case Ref. Number: {{ caseRef || 'N/A' }} <span class="status">(Closed)</span></p>
-    <div>
-      <button>Contact History</button>
-      <button>About</button>
-      <button>Exit</button>
-      <button>SMS</button>
-      <button>Send Email</button>
-    </div>
-  </div>
-  <mat-tab-group>
-    <mat-tab label="Caller">
-      <!-- Caller content goes here -->
-      <app-caller-details></app-caller-details>
-    </mat-tab>
-    <mat-tab label="Validation">
-      <!-- Validation content -->
-      <app-validation></app-validation>
-    </mat-tab>
-    <mat-tab label="Voucher/SMS">
-      <!-- Voucher/SMS content -->
-      <app-voucher-sms></app-voucher-sms>
-    </mat-tab>
-    <mat-tab label="Complaints">
-      <!-- Complaints content -->
-      <app-complaints></app-complaints>
-    </mat-tab>
-    <mat-tab label="Documents">
-      <!-- Documents content -->
-      <app-documents></app-documents>
-    </mat-tab>
-  </mat-tab-group>
+  <mat-expansion-panel class="mat-expansion-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Case Progress</mat-panel-title>
+    </mat-expansion-panel-header>
 
-  
+    <!-- Angular Material Stepper -->
+    <mat-horizontal-stepper #stepper linear>
+      <mat-step [completed]="true">
+        <ng-template matStepLabel>Case Initiation</ng-template>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>Evaluation</ng-template>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>Ongoing</ng-template>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>On Hold</ng-template>
+      </mat-step>
+      <mat-step [completed]="false">
+        <ng-template matStepLabel>Resolution</ng-template>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel class="mat-expansion-panel">
+    <mat-expansion-panel-header>
+      <mat-panel-title> Track Driver </mat-panel-title>
+    </mat-expansion-panel-header>
+    <img
+      src="https://blog.afi.io/content/images/2021/02/Screen-Shot-2021-02-24-at-12.16.12-PM.png"
+      alt="Driver Map"
+      class="driver-map"
+    />
+  </mat-expansion-panel>
+
+  <!-- call-details-component.html -->
+
+  <div class="caller-container">
+    <div class="call-ref">
+      <p>
+        Case Reference Number: {{ caseRef || "N/A" }}
+        <span class="status">(Closed)</span>
+      </p>
+      <div>
+        <button>Contact History</button>
+        <button>About</button>
+        <button>Exit</button>
+        <button>SMS</button>
+        <button>Send Email</button>
+      </div>
+    </div>
+
+    <!-- <div class="tab-menuu">
+    <p
+      [ngClass]="{ active: activeTab === 'caller' }"
+      (click)="selectTab('caller')"
+    >
+      Caller
+    </p>
+    <p>Validation</p>
+    <p>Voucher/SMS</p>
+    <p>Complaints</p>
+    <p>Documents</p>
+  </div> -->
+
+    <div class="tabs-wrapper">
+      <ul class="tab-header">
+        <li
+          *ngFor="let tab of tabs; let i = index"
+          [class.active]="selectedTab === i"
+          (click)="selectTab(i)"
+        >
+          {{ tab.label }}
+        </li>
+      </ul>
+
+      <div class="green-strip"></div>
+
+      <div class="tab-body">
+        <ng-container [ngSwitch]="selectedTab">
+          <app-caller-details *ngSwitchCase="0"></app-caller-details>
+          <app-validation *ngSwitchCase="1"></app-validation>
+          <app-voucher-sms *ngSwitchCase="2"></app-voucher-sms>
+          <app-complaints *ngSwitchCase="3"></app-complaints>
+          <app-documents *ngSwitchCase="4"></app-documents>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- <div class="caller-container1" *ngIf="activeTab === 'caller'">
+    <div class="caller-section">
+      <form [formGroup]="callerForm" class="caller-form">
+        <div class="form-group">
+          <label>Client</label>
+          <select formControlName="client">
+            <option *ngFor="let client of clients" [value]="client">
+              {{ client }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Service Type</label>
+          <select formControlName="serviceType">
+            <option *ngFor="let service of serviceTypes" [value]="service">
+              {{ service }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-groupp full-width">
+          <p class="label">
+            Did you get consent to obtain the caller's personal information and
+            explained what it will be used for?
+          </p>
+          <div class="radio-group">
+            <label>
+              <input type="radio" formControlName="consent" value="yes" />
+              Yes
+            </label>
+            <label>
+              <input type="radio" formControlName="consent" value="no" />
+              No
+            </label>
+            <label>
+              <input type="radio" formControlName="consent" value="na" />
+              N/A
+            </label>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <p-floatLabel variant="on">
+              <p-iconField>
+                <input
+                  pInputText
+                  id="on_label"
+                  formControlName="firstName"
+                  autocomplete="off"
+                  class="input"
+                />
+              </p-iconField>
+              <label for="on_label">First Name</label>
+            </p-floatLabel>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <p-floatLabel variant="on">
+              <p-iconField>
+                <input
+                  pInputText
+                  id="on_label"
+                  formControlName="secondName"
+                  autocomplete="off"
+                  class="input"
+                />
+              </p-iconField>
+              <label for="on_label">Second Name</label>
+            </p-floatLabel>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Callback Number</label>
+            <ngx-intl-tel-input
+              [cssClass]="'custom'"
+              [preferredCountries]="[
+                CountryISO.UnitedStates,
+                CountryISO.UnitedKingdom
+              ]"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [separateDialCode]="true"
+              [searchCountryField]="searchFields"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="CountryISO.India"
+              [phoneValidation]="true"
+              name="callbackNumber"
+              formControlName="callbackNumber"
+            ></ngx-intl-tel-input>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>24 Hour Number</label>
+            <ngx-intl-tel-input
+              [cssClass]="'custom'"
+              [preferredCountries]="[
+                CountryISO.UnitedStates,
+                CountryISO.UnitedKingdom
+              ]"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [separateDialCode]="true"
+              [searchCountryField]="searchFields"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="CountryISO.India"
+              [phoneValidation]="true"
+              name="24HourNumber"
+              formControlName="24HourNumber"
+            ></ngx-intl-tel-input>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cell Number</label>
+            <ngx-intl-tel-input
+              [cssClass]="'custom'"
+              [preferredCountries]="[
+                CountryISO.UnitedStates,
+                CountryISO.UnitedKingdom
+              ]"
+              [enablePlaceholder]="true"
+              [searchCountryFlag]="true"
+              [separateDialCode]="true"
+              [searchCountryField]="searchFields"
+              [selectFirstCountry]="false"
+              [selectedCountryISO]="CountryISO.India"
+              [phoneValidation]="true"
+              name="cellNumber"
+              formControlName="CellNumber"
+            ></ngx-intl-tel-input>
+          </div>
+        </div>
+
+        <div class="form-grouppp">
+          <label class="labell">Caller is Policy Holder</label>
+          <div class="radio-group">
+            <label>
+              <input
+                type="radio"
+                formControlName="isPolicyHolder"
+                value="yes"
+              />
+              Yes
+            </label>
+            <label>
+              <input type="radio" formControlName="isPolicyHolder" value="no" />
+              No
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <p-floatLabel variant="on">
+              <p-iconField>
+                <input
+                  pInputText
+                  id="on_label"
+                  formControlName="firstName"
+                  autocomplete="off"
+                  class="input"
+                />
+              </p-iconField>
+              <label for="on_label">Agent</label>
+            </p-floatLabel>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <p-floatLabel variant="on">
+              <p-iconField>
+                <input
+                  pInputText
+                  id="on_label"
+                  formControlName="firstName"
+                  autocomplete="off"
+                  class="input"
+                />
+              </p-iconField>
+              <label for="on_label">Call Open Date</label>
+            </p-floatLabel>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Preferred Language</label>
+          <select formControlName="language">
+            <option value="">Select</option>
+            <option *ngFor="let lang of languages" [value]="lang">
+              {{ lang }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-grouppp">
+          <label class="labell">Case Reference Number Given To Caller? </label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" formControlName="refGiven" value="yes" />
+              Yes
+            </label>
+            <label>
+              <input type="radio" formControlName="refGiven" value="no" />
+              No
+            </label>
+          </div>
+        </div>
+        <div class="call-button">
+          <button class="call-save-button">Save</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="key-features">
+      <a href="#">Key Features</a>
+      <ul>
+        <li>24 Hour assistance on any Legal Matter</li>
+        <li>
+          <span class="highlight">30 min FREE face-to-face consultation</span>
+          with an attorney
+        </li>
+        <li>
+          Free <span class="highlight">Standard Legal Documentation</span>
+        </li>
+        <li>Free Will Service</li>
+        <li>
+          Free <span class="highlight">Estate Planning</span> (Office Hours
+          Only)
+        </li>
+        <li>
+          <span class="highlight">Labour Law & Industrial relations</span>
+          services
+        </li>
+        <li>
+          <span class="highlight">Tax</span> Info Helpline (Office Hours Only)
+        </li>
+      </ul>
+
+      <a href="#">Conditions</a>
+      <ul>
+        <li>This service is confined to within RSA</li>
+        <li>This service relates to South African Law only</li>
+      </ul>
+
+      <a href="#">Who Qualifies for this Benefit?</a>
+      <p>Any person listed as a life covered under a valid policy.</p>
+    </div>
+  </div> -->
+  </div>
+</div>

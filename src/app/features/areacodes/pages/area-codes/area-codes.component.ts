@@ -19,6 +19,7 @@ import {
 } from '../../state/area-code.actions';
 import { Store } from '@ngxs/store';
 import { AreaCodesState } from '../../state/area-code.state';
+import { SnackbarService } from '../../../../core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-area-codes',
@@ -119,59 +120,39 @@ export class AreaCodesComponent implements OnInit {
       onCellClicked: (params: any) => this.softDeleteProvider(params.data),
     },
     {
-  headerName: 'Save',
-  flex: 1,
-  minWidth: 120,
-  cellRenderer: (params: any) => {
-    const isNew = !params.data.AreaCodeId;
-    const isEdited = params.data.isEdited === true;
-    const disabled = !(isNew || isEdited);
-    const disabledAttr = disabled ? 'disabled' : '';
+      headerName: 'Save',
+      flex: 1,
+      minWidth: 120,
+      cellRenderer: () => {
+        return `
+    <style>
+      .save-icon-btn:hover .save-icon {
+        transform: scale(1.2) ;
+      }
+    </style>
+    <button
+      class="save-icon-btn"
+      style="
+        background-color: white;
+        color: #333;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 14px;
+        font-size: 1rem;
+        gap: 8px;
+        cursor: pointer;
+      "
+    >
+      <i class="fas fa-save save-icon" style="color: #28a745; font-size: 1.2rem; transition: transform 0.3s ease;"></i> 
+    </button>
+  `;
+      },
 
-    const buttonBg = disabled ? '#ccc' : '#05b9bc';
-    const circleBg = disabled ? '#e0e0e0' : 'white';
-    const iconColor = disabled ? '#9e9e9e' : '#05b9bc';
-
-    return `
-      <button
-        ${disabledAttr}
-        style="
-          background-color: ${buttonBg};
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-weight: 500;
-          height: 42px;
-          display: flex;
-          align-items: center;
-          padding: 0 14px;
-          font-size: 1rem;
-          justify-content: center;
-          cursor: ${disabled ? 'not-allowed' : 'pointer'};
-        "
-      >
-        <span
-          style="
-            background-color: ${circleBg};
-            border-radius: 50%;
-            width: 26px;
-            height: 26px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 8px;
-          "
-        >
-          <i class="fa-solid fa-check" style="
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: ${iconColor};
-          "></i>
-        </span>
-        <span>Save</span>
-      </button>
-    `;
-  },
       cellStyle: {
         borderRight: '1px solid #ccc',
         display: 'flex',
@@ -180,13 +161,7 @@ export class AreaCodesComponent implements OnInit {
       },
       headerClass: 'bold-header',
       onCellClicked: (params: any) => {
-        const data = params.data;
-        const isNew = !data.AreaCodeId;
-        const isEdited = data.isEdited === true;
-
-        if (isNew || isEdited) {
-          this.saveRow(data);
-        }
+        this.saveRow(params.data);
       },
     },
   ];
@@ -199,8 +174,9 @@ export class AreaCodesComponent implements OnInit {
 
   constructor(
     private store: Store,
-    private areaCodesService: AreaCodesService
-  ) { }
+    private areaCodesService: AreaCodesService,
+    private snackbarService:SnackbarService
+  ) {}
 
   ngOnInit(): void {
     this.store.dispatch(new LoadAreaCodes());
@@ -243,10 +219,15 @@ export class AreaCodesComponent implements OnInit {
 
     const trimmedCode = row.AreaCode?.trim() ?? '';
     const trimmedDesc = row.Description?.trim() ?? '';
-    const isComplete = trimmedCode && trimmedDesc && row.Type && row.IsActive !== null;
+    const isComplete =
+      trimmedCode && trimmedDesc && row.Type && row.IsActive !== null;
 
-    if (!isComplete) {
-      alert('Please complete all required fields before saving.');
+    // if (!isComplete) {
+    //   alert('Please complete all required fields before saving.');
+    //   return;
+    // }
+    if (!isNew && !row.isEdited) {
+      this.snackbarService.showInfo('No changes to save.');
       return;
     }
 
@@ -279,18 +260,23 @@ export class AreaCodesComponent implements OnInit {
         ...sanitizedRow
       } = row;
 
-      this.areaCodesService.updateAreaCode(areaCodeId!, sanitizedRow).subscribe({
-        next: () => {
-          alert('Updated successfully!');
-          row.isEdited = false;
-          delete row.originalAreaCode;
-          this.gridApi.applyTransaction({ update: [row] });
-        },
-        error: (err) => {
-          alert('Error updating area code.');
-          console.error(err);
-        },
-      });
+      this.areaCodesService
+        .updateAreaCode(areaCodeId!, sanitizedRow)
+        .subscribe({
+          next: () => {
+           // alert('Updated successfully!');
+           this.snackbarService.showSuccess('Updated successfully!');
+            row.isEdited = false;
+            delete row.originalAreaCode; // Remove originalAreaCode after save
+
+            this.gridApi.applyTransaction({ update: [row] });
+          },
+          error: (err) => {
+            
+            //this.snackbarService.showError('Error updating area code.');
+            console.error(err);
+          },
+        });
     }
   }
 
@@ -302,6 +288,7 @@ export class AreaCodesComponent implements OnInit {
   softDeleteProvider(areaCode: AreaCodes): void {
     const updatedAreaCode = { ...areaCode, isDeleted: true };
     this.store.dispatch(new SoftDeleteAreaCode(updatedAreaCode));
+    this.snackbarService.showSuccess('Removed Successfully')
   }
 
   addRow(): void {
@@ -312,6 +299,7 @@ export class AreaCodesComponent implements OnInit {
       Type: 'Landline',
       IsActive: true,
 
+      // isDeleted: false,
     };
     this.store.dispatch(new AddAreaCodeRowLocally(newRow));
   }
@@ -337,5 +325,4 @@ export class AreaCodesComponent implements OnInit {
 
     return [addRow, deleteRow, 'separator', 'copy', 'export'];
   };
-
 }

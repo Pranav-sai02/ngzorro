@@ -1,11 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SOUTH_AFRICAN_LANGUAGES } from '../../../../../constants/south-african-languages';
 import { Call } from '../../../calls/models/Call';
 import { CallDataService } from '../../../calls/services/call-data-service/call-data.service';
 import { ClientService } from '../../../../client/services/client-service/client.service';
 import { MatStepper } from '@angular/material/stepper';
+import {
+  CountryISO,
+  PhoneNumberFormat,
+  SearchCountryField,
+} from 'ngx-intl-tel-input';
 
 @Component({
   selector: 'app-call-details',
@@ -14,8 +24,6 @@ import { MatStepper } from '@angular/material/stepper';
   styleUrl: './call-details.component.css',
 })
 export class CallDetailsComponent implements OnInit {
-    current: number = 0;
-  index = 'Case Initiation – Start the case and collect details';
   languages = SOUTH_AFRICAN_LANGUAGES;
   caseRef!: string;
   callerName: string = '';
@@ -24,26 +32,65 @@ export class CallDetailsComponent implements OnInit {
   callerForm!: FormGroup;
   caseData: Call | null = null;
 
+  agents: any;
+  callOpenDates: any;
+  today: any;
+
   // Stepper configuration
   isLinear: boolean = true;
   activeIndex: number = 0;
   completedSteps: boolean[] = [false, false, false, false, false];
 
+  tabs = [
+    { label: 'Caller' },
+    { label: 'Validation' },
+    { label: 'Voucher/SMS' },
+    { label: 'Complaints' },
+    { label: 'Documents' }
+  ];
+
+  selectedTab = 0;
+
+  selectTab(index: number) {
+    this.selectedTab = index;
+  }
 
   // List of clients for the dropdown
-
-  clients: string[] = ['AUL-FUNER SCHEMES (INACTIVE)'];
+clients: string[] = ['AUL-FUNER SCHEMES (INACTIVE)'];
   clientNames: string[] = [];
-  serviceTypes: string[] = ['AVS-Legal Assist', 'Service Type B', 'Service Type C'];
+  serviceTypes: string[] = [
+    'AVS-Legal Assist',
+    'Service Type B',
+    'Service Type C',
+  ];
+  separateDialCode = false;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+  preferredCountries: CountryISO[] = [
+    CountryISO.UnitedStates,
+    CountryISO.UnitedKingdom,
+  ];
+  phoneForm = new FormGroup({
+    phone: new FormControl(undefined, [Validators.required]),
+  });
+
+  changePreferredCountries() {
+    this.preferredCountries = [CountryISO.India, CountryISO.Canada];
+  }
+  // phoneForm!: FormGroup;
+  searchFields = [
+    SearchCountryField.Name,
+    SearchCountryField.DialCode,
+    SearchCountryField.Iso2,
+  ];
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private callDataService: CallDataService,
     private clientService: ClientService
-  ) { }
-
-
+  ) {}
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params) => {
@@ -63,68 +110,30 @@ export class CallDetailsComponent implements OnInit {
       isPolicyHolder: [''],
       language: [''],
       refGiven: [''],
+      callOpenDate: [''],
     });
 
     // Optional: use shared data from service
     this.caseData = this.callDataService.getSelectedCall();
   }
 
-  selectTab(tabName: string) {
-    this.activeTab = tabName;
-  }
+  // selectTab(tabName: string) {
+  //   this.activeTab = tabName;
+  // }
 
- 
+  completeStep(stepper: MatStepper): void {
+    this.completedSteps[this.activeIndex] = true;
+    stepper.next();
+    // Remove manual update of activeIndex here
+  }
 
   resetStepper(stepper: MatStepper): void {
     this.completedSteps = [false, false, false, false, false]; // ✅ proper reset
     this.activeIndex = 0;
     stepper.reset(); // optional: resets Angular Material stepper
   }
-  @Input() step: number = 0;
-  @Output() stepComplete = new EventEmitter<number>();
 
-  completeStep(stepper: MatStepper): void {
-    this.completedSteps[this.step] = true;
-    this.stepComplete.emit(this.step + 1); // inform wrapper to move to next step
-    stepper.next();
+  getYearRange() {
+    throw new Error('Method not implemented.');
   }
-
-  pre(): void {
-    this.current -= 1;
-    // this.changeContent();
-  }
-
-  next(): void {
-    this.current += 1;
-    // this.changeContent();
-  }
-
-  done(): void {
-    this.index = 'Case Closed';
-    console.log('Case process complete');
-  }
-
-  // changeContent(): void {
-  //   switch (this.current) {
-  //     case 0:
-  //       this.index = 'Case Initiation – Start the case and collect details';
-  //       break;
-  //     case 1:
-  //       this.index = 'Evaluation – Review and validate documents';
-  //       break;
-  //     case 2:
-  //       this.index = 'Ongoing – Actions in progress for case';
-  //       break;
-  //     case 3:
-  //       this.index = 'On Hold – Awaiting external updates';
-  //       break;
-  //     case 4:
-  //       this.index = 'Resolution – Final checks and close the case';
-  //       break;
-  //     default:
-  //       this.index = 'Error – Invalid step';
-  //   }
-  // }
-
-
 }

@@ -11,7 +11,7 @@ export class AreaCodesService {
   private apiUrl = API_ENDPOINTS.AREA_CODES;
   // Replace with your real API endpoint
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAreaCodes(): Observable<AreaCodes[]> {
     return this.http.get<AreaCodes[]>(this.apiUrl);
@@ -21,6 +21,9 @@ export class AreaCodesService {
     return this.http.delete<void>(`${this.apiUrl}/${code}`);
   }
 
+  //  addAreaCode(areaCode:  AreaCodes): Observable<AreaCodes> {
+  //   return this.http.post<AreaCodes>(this.apiUrl, areaCode);
+  // }
   addAreaCode(areaCode: AreaCodes): Observable<AreaCodes> {
     const payload = {
       AreaCode: areaCode.AreaCode,
@@ -31,7 +34,10 @@ export class AreaCodesService {
     return this.http.post<AreaCodes>(this.apiUrl, payload);
   }
 
-  updateAreaCode(areaCodeId: number, data: Partial<AreaCodes>): Observable<any> {
+  updateAreaCode(
+    areaCodeId: number,
+    data: Partial<AreaCodes>
+  ): Observable<any> {
     return this.http.put(`${this.apiUrl}/${areaCodeId}`, data);
   }
 

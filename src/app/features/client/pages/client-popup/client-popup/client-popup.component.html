@@ -73,27 +73,62 @@
       </div>
 
       <div class="form-row">
-        <div class="form-group input-container">
-          <label>Area Code</label>
-          <select formControlName="AreaCode">
-            <option value="" disabled selected>Select Area Code</option>
-            <option value="000">000</option>
-            <!-- Add more options as needed -->
+        <div class="form-group input-container full-width">
+          <label>Client Group <span class="required">*</span></label>
+          <select formControlName="ClientGroup">
+            <option value="" disabled>Select Client Group</option>
+            <option value="Life Funeral">Life Funeral</option>
+            <!-- Add more options -->
           </select>
-        </div>
-        <div class="form-group input-container">
-          <label>Tel</label>
-          <input
-            type="text"
-            formControlName="Telephone"
-            placeholder="Enter Telephone Number"
-          />
-          <span
-            class="clear-icon"
-            *ngIf="clientForm.get('Telephone')?.value"
-            (click)="clearField('Telephone')"
-            >✕</span
+          <div
+            class="error-messages"
+            *ngIf="
+              clientForm.get('ClientGroup')?.touched &&
+              clientForm.get('ClientGroup')?.invalid
+            "
           >
+            <small *ngIf="clientForm.get('ClientGroup')?.errors?.['required']"
+              >Client Group is required</small
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="form-row">
+        <div class="form-group input-container full-width">
+          <label>Address</label>
+          <textarea
+            formControlName="Address"
+            placeholder="Enter Address"
+            rows="3"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Telephone -->
+       <div class="client-form-country">
+      <div class="form-row">
+        <div class="form-group input-container full-width">
+          <label>Telephone</label>
+          <ngx-intl-tel-input
+            [cssClass]="'custom'"
+            [preferredCountries]="[
+              CountryISO.UnitedStates,
+              CountryISO.UnitedKingdom
+            ]"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [separateDialCode]="true"
+            [searchCountryField]="searchFields"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO.SouthAfrica"
+            [phoneValidation]="true"
+            name="Telephone"
+            formControlName="Telephone"
+          ></ngx-intl-tel-input>
+         
+          
           <div
             class="error-messages"
             *ngIf="
@@ -101,37 +136,58 @@
               clientForm.get('Telephone')?.invalid
             "
           >
-            <small *ngIf="clientForm.get('Telephone')?.errors?.['pattern']">
-              Enter a valid telephone number
-            </small>
+            <small *ngIf="clientForm.get('Telephone')?.errors?.['required']"
+              >Telephone is required</small
+            >
+            <small *ngIf="clientForm.get('Telephone')?.errors?.['pattern']"
+              >Enter a valid number</small
+            >
           </div>
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group input-container">
           <label>Fax</label>
-          <input type="text" formControlName="Fax" placeholder="Enter Fax" />
-          <span
-            class="clear-icon"
-            *ngIf="clientForm.get('Fax')?.value"
-            (click)="clearField('Fax')"
-            >✕</span
+          <ngx-intl-tel-input
+            [cssClass]="'custom'"
+            [preferredCountries]="[
+              CountryISO.UnitedStates,
+              CountryISO.UnitedKingdom
+            ]"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [separateDialCode]="true"
+            [searchCountryField]="searchFields"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO.SouthAfrica"
+            [maxLength]="10"
+            [phoneValidation]="true"
+            name="fax"
+            formControlName="Fax"
           >
+          </ngx-intl-tel-input>
         </div>
+        </div>
+        <div class="form-row">
         <div class="form-group input-container">
-          <label>Mob</label>
-          <input
-            type="text"
+          <label>Mobile Number <span class="required">*</span></label>
+          <ngx-intl-tel-input
+            [cssClass]="'custom'"
+            [preferredCountries]="[
+              CountryISO.SouthAfrica,
+              CountryISO.UnitedKingdom
+            ]"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [separateDialCode]="true"
+            [searchCountryField]="searchFields"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO.SouthAfrica"
+            [phoneValidation]="true"
+            name="Mobile"
             formControlName="Mobile"
-            placeholder="Enter Mobile Number"
-          />
-          <span
-            class="clear-icon"
-            *ngIf="clientForm.get('Mobile')?.value"
-            (click)="clearField('Mobile')"
-            >✕</span
-          >
+          ></ngx-intl-tel-input>
+        
           <div
             class="error-messages"
             *ngIf="
@@ -139,14 +195,15 @@
               clientForm.get('Mobile')?.invalid
             "
           >
-            <small *ngIf="clientForm.get('Mobile')?.errors?.['required']">
-              Mobile Number is required
-            </small>
-            <small *ngIf="clientForm.get('Mobile')?.errors?.['pattern']">
-              Enter a valid 10-digit number
-            </small>
+            <small *ngIf="clientForm.get('Mobile')?.errors?.['required']"
+              >Mobile Number is required</small
+            >
+            <small *ngIf="clientForm.get('Mobile')?.errors?.['pattern']"
+              >Enter a valid 10-digit number</small
+            >
           </div>
         </div>
+      </div>
       </div>
 
       <div class="form-row">
@@ -180,17 +237,14 @@
       <div class="form-row">
         <div class="form-group input-container full-width">
           <label>Company Logo</label>
-          <input
+          <!-- <input
             type="text"
             formControlName="CompanyLogo"
-            placeholder="Enter Company Logo URL"
-          />
-          <span
-            class="clear-icon"
-            *ngIf="clientForm.get('CompanyLogo')?.value"
-            (click)="clearField('CompanyLogo')"
-            >✕</span
-          >
+            placeholder="Enter Company Logo"
+          /> -->
+          <select>
+            <option>Select</option>
+          </select>
         </div>
       </div>
 

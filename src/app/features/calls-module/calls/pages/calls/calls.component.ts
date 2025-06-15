@@ -31,16 +31,23 @@ export class CallsComponent implements OnInit {
     },
     {
       field: 'caseRef',
-      headerName: 'Case Ref No',
+      headerName: 'Case Reference Number',
       filter: 'agTextColumnFilter',
-      minWidth: 200,
+      minWidth: 250,
       flex: 1,
       cellRenderer: (params: ICellRendererParams) =>
         `<a style="color:blue;cursor:pointer;text-decoration:underline;">${params.value}</a>`,
       onCellClicked: (event: CellClickedEvent) => {
         const selectedCall = event.data;
         this.callDataService.setSelectedCall(selectedCall);
-        this.router.navigate(['/cases/case-details']);
+
+        const queryParams = {
+          callRef: selectedCall.caseRef,
+          callerName: `${selectedCall.callerFirstName} ${selectedCall.callerLastName}`,
+          client: selectedCall.client,
+        };
+
+        this.router.navigate(['/cases/case-details'], { queryParams });
       },
 
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -48,8 +55,8 @@ export class CallsComponent implements OnInit {
     },
     {
       field: 'caseNo',
-      headerName: 'Case No ',
-       filter: 'agTextColumnFilter',
+      headerName: 'Case Number ',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -58,7 +65,7 @@ export class CallsComponent implements OnInit {
     {
       field: 'caseDate',
       headerName: 'Case Date',
-       filter: 'agTextColumnFilter',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 2,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -67,7 +74,7 @@ export class CallsComponent implements OnInit {
     {
       field: 'callerName',
       headerName: 'Caller Name',
-       filter: 'agTextColumnFilter',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -76,7 +83,7 @@ export class CallsComponent implements OnInit {
     {
       field: 'deceasedName',
       headerName: 'Deceasced Name',
-       filter: 'agTextColumnFilter',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -85,7 +92,7 @@ export class CallsComponent implements OnInit {
     {
       field: 'client',
       headerName: 'Client',
-       filter: 'agTextColumnFilter',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -94,7 +101,7 @@ export class CallsComponent implements OnInit {
     {
       field: 'type',
       headerName: 'Type',
-       filter: 'agTextColumnFilter',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -103,7 +110,7 @@ export class CallsComponent implements OnInit {
     {
       field: 'funeralDate',
       headerName: 'Funeral Date',
-       filter: 'agTextColumnFilter',
+      filter: 'agTextColumnFilter',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
@@ -154,7 +161,7 @@ export class CallsComponent implements OnInit {
       client: call.client,
     };
 
-    this.router.navigate(['/calls/call-details'], { queryParams });
+    this.router.navigate(['/cases/case-details'], { queryParams });
   }
 
   onFitColumns(): void {
@@ -164,4 +171,6 @@ export class CallsComponent implements OnInit {
   onGridSizeChanged(event: any): void {
     this.onFitColumns();
   }
+
+  
 }

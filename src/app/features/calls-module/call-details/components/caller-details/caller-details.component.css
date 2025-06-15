@@ -1,4 +1,21 @@
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
 
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+@use "@angular/material" as mat;
+
+:root {
+  @include mat.stepper-overrides(
+    (
+      container-color: orange,
+      header-done-state-icon-background-color: red,
+    )
+  );
+}
 
 .caller-container1 {
   display: flex;
@@ -97,6 +114,9 @@ a {
   color: #444;
   padding-left: 20px;
 }
+.form-groupp .label{
+  margin-left: 5px;
+}
 .form-group label {
   width: 200px;
   color: #444;
@@ -121,7 +141,7 @@ a {
   /* Core styling */
   width: 255px;
   padding: 8px 30px 8px 10px;
-  border-radius: 5px;
+  border-radius: 10px;
   border: 1px solid #d3d3d3;
   background-color: #fff;
   font-size: 14px;
@@ -157,6 +177,12 @@ a {
 .radio-group {
   display: flex;
   gap: 1rem;
+  margin-left: 12px;
+}
+.radio-groupp{
+  margin-left: 5px;
+  display: flex;
+  gap: 1rem;
 }
 .key-features ul {
   list-style-type: disc;
@@ -172,48 +198,68 @@ a {
   padding-left: 5px;
 }
 
-.steps-content {
-  margin-top: 16px;
-  border: 1px dashed #e9e9e9;
+.call-save-button {
+  padding: 10px 24px;
+  border: none;
   border-radius: 6px;
-  background-color: #fafafa;
-  min-height: 150px;
-  padding: 24px;
-  font-size: 16px;
-}
-
-.steps-action {
-  margin-top: 24px;
-}
-
-button {
-  margin-right: 8px;
-}
-
-.btn.btn-secondary {
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
   background-color: #05b9bc;
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
-  height: 42px;
+}
+.call-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+::ng-deep .iti {
+  display: flex;
+  margin-left: 10px;
+}
+
+::ng-deep .iti input.iti__tel-input,
+.iti input.iti__tel-input[type="text"],
+.iti input.iti__tel-input[type="tel"] {
+  width: 255px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+}
+::ng-deep .iti__flag-container.open + input {
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+::ng-deep .iti__selected-flag.dropdown-toggle {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 0 14px;
+  justify-content: center;
+  height: 38px;
+  padding: 10px;
+  border-bottom-left-radius: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-right: 1px solid #ccc;
+}
+::ng-deep .iti__dropdown-content[_ngcontent-ng-c4036060811] {
+  border: 1px solid #ccc !important;
+  width: 230px !important;
+}
+::ng-deep .iti__country-list {
+  height: 130px;
+  list-style: none;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+
 }
 
-.btn.btn-secondary:hover {
-  background-color: #048a91;
+::ng-deep .iti.separate-dial-code input {
+  padding-left: 95px !important;
 }
 
-.btn.btn-secondary i {
-  font-size: 1rem;
-}
-
-/* Icon circle inside New button */
-.btn .rounded-circle {
-  width: 24px;
-  height: 24px;
-  font-size: 14px;
+::ng-deep .iti.separate-dial-code .iti__selected-flag {
+  width: 85px !important;
 }

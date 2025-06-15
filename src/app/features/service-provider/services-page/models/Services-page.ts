@@ -7,4 +7,6 @@ export interface ServicesPage {
   EnforceMobileNumber: boolean;
   SendRefSMSEnabled: boolean;
   IsActive: boolean;
+  IsDeleted?: boolean;
+  
 }

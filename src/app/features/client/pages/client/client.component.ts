@@ -4,6 +4,7 @@ import { ActiveToggleRendererComponent } from '../../../../shared/component/acti
 import { SoftDeleteButtonRendererComponent } from '../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
 import { ColDef, GridApi, GridOptions } from 'ag-grid-community';
 import { ClientService } from '../../services/client-service/client.service';
+import { SnackbarService } from '../../../../core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-client',
@@ -33,20 +34,21 @@ export class ClientComponent implements OnInit {
     animateRows: true,
     rowSelection: 'single',
     rowClassRules: {
-      'temporary-row': (params) => params.data.name.includes('(INACTIVE)'), // Highlight inactive rows
+      'temporary-row': (params) => params.data?.Name?.includes('(INACTIVE)'), // Highlight inactive rows
     },
   };
 
-  columnDefs: ColDef[] = [
+  columnDefs: ColDef<Client>[] = [
     {
-      field: 'Name', // Match field names with Client model
+      field: 'ClientName', // Match field names with Client model
       headerName: 'Name',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
       sortable: true,
-      filter: true,
+
+      filter: 'agTextColumnFilter',
     },
     {
       field: 'ClaimsManager',
@@ -56,37 +58,39 @@ export class ClientComponent implements OnInit {
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
       sortable: true,
-      filter: true,
+      filter: 'agTextColumnFilter',
     },
     {
       field: 'ClientGroup',
+      valueGetter: (params) => params.data?.ClientGroup?.Name ?? '',
       headerName: 'Group Name',
       minWidth: 230,
       flex: 2,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
       sortable: true,
-      filter: true,
+      filter: 'agTextColumnFilter',
     },
     {
-      field: 'AreaCode',
+      field: 'AreaCodes',
+      valueGetter: (params) => params.data?.AreaCodes?.AreaCode ?? '',
       headerName: 'Area Code',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc', textAlign: 'center' },
       headerClass: 'bold-header',
       sortable: true,
-      filter: true,
+      filter: 'agTextColumnFilter',
     },
     {
-      field: 'Telephone',
+      field: 'Tel',
       headerName: 'Telephone',
       minWidth: 230,
       flex: 1,
       cellStyle: { borderRight: '1px solid #ccc', textAlign: 'center' },
       headerClass: 'bold-header',
       sortable: true,
-      filter: true,
+      filter: 'agTextColumnFilter',
     },
     {
       field: 'IsActive',
@@ -102,13 +106,14 @@ export class ClientComponent implements OnInit {
         justifyContent: 'center',
       },
       headerClass: 'bold-header',
-      sortable: false,
-      filter: false,
+      sortable: true,
+
+      filter: true,
     },
     {
       headerName: 'Delete',
       flex: 1,
-      minWidth: 100,
+      minWidth: 150,
       cellRenderer: 'softDeleteRenderer',
       cellStyle: {
         borderRight: '1px solid #ccc',
@@ -117,14 +122,11 @@ export class ClientComponent implements OnInit {
         justifyContent: 'center',
       },
       headerClass: 'bold-header',
-      onCellClicked: (params: any) => this.softDeleteProvider(params.data),
+      onCellClicked: (params: any) => this.softDelete(params.data),
     },
   ];
-  store: any;
-  softDeleteProvider(client: Client): void {
-    const updatedClient = { ...client, isDeleted: true };
-    // this.store.dispatch(new SoftDeleteAreaCode(updatedClient));
-  }
+
+ 
 
   defaultColDef: ColDef = {
     sortable: true,
@@ -137,7 +139,7 @@ export class ClientComponent implements OnInit {
     activeToggleRenderer: ActiveToggleRendererComponent,
   };
 
-  constructor(private clientService: ClientService) {}
+  constructor(private clientService: ClientService, private snackbarService:SnackbarService) {}
 
   /* === Lifecycle === */
   ngOnInit(): void {
@@ -157,7 +159,7 @@ export class ClientComponent implements OnInit {
   }
 
   loadUsers(): void {
-    this.clientService.getClient().subscribe({
+    this.clientService.getClients().subscribe({
       next: (data: Client[]) => {
         this.users = data;
         this.resizeGrid();
@@ -198,5 +200,18 @@ export class ClientComponent implements OnInit {
     if (field in this.editedUser) {
       (this.editedUser as any)[field] = '';
     }
+  }
+
+  softDelete(Client: Client): void {
+    // Mark the item as deleted (optional if you want to preserve the flag)
+    Client.IsDeleted = true;
+
+    // Remove it from rowData
+    this.users = this.users.filter(group => group.ClientId !== Client.ClientId);
+
+    // Optionally update the grid manually if you want
+    // this.gridApi.setRowData(this.rowData);
+
+    this.snackbarService.showSuccess('Removed successfully');
   }
 }

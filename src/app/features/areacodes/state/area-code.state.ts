@@ -4,7 +4,12 @@ import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { AreaCodes } from '../models/AreaCodes';
 import { AreaCodesService } from '../services/areacodes/area-codes.service';
-import { AddAreaCodeRowLocally, LoadAreaCodes, SoftDeleteAreaCode, UpdateAreaCode } from './area-code.actions';
+import {
+  AddAreaCodeRowLocally,
+  LoadAreaCodes,
+  SoftDeleteAreaCode,
+  UpdateAreaCode,
+} from './area-code.actions';
 
 export interface AreaCodesStateModel {
   areaCodes: AreaCodes[];
@@ -18,7 +23,7 @@ export interface AreaCodesStateModel {
 })
 @Injectable()
 export class AreaCodesState {
-  constructor(private areaCodesService: AreaCodesService) { }
+  constructor(private areaCodesService: AreaCodesService) {}
 
   @Selector()
   static getAreaCodes(state: AreaCodesStateModel) {
@@ -50,11 +55,11 @@ export class AreaCodesState {
     );
   }
 
-
-
-
   @Action(AddAreaCodeRowLocally)
-  addRowLocally(ctx: StateContext<AreaCodesStateModel>, action: AddAreaCodeRowLocally) {
+  addRowLocally(
+    ctx: StateContext<AreaCodesStateModel>,
+    action: AddAreaCodeRowLocally
+  ) {
     const state = ctx.getState();
 
     ctx.patchState({
@@ -63,31 +68,30 @@ export class AreaCodesState {
     });
   }
 
+  @Action(UpdateAreaCode)
+  updateAreaCode(
+    ctx: StateContext<AreaCodesStateModel>,
+    action: UpdateAreaCode
+  ) {
+    const state = ctx.getState();
 
- @Action(UpdateAreaCode)
-updateAreaCode(
-  ctx: StateContext<AreaCodesStateModel>,
-  action: UpdateAreaCode
-) {
-  const state = ctx.getState();
+    const updatedAreaCodes = state.areaCodes.map((areaCode) =>
+      areaCode.AreaCodeId === action.payload.AreaCodeId
+        ? action.payload
+        : areaCode
+    );
 
-  const updatedAreaCodes = state.areaCodes.map((areaCode) =>
-    areaCode.AreaCodeId === action.payload.AreaCodeId ? action.payload : areaCode
-  );
+    ctx.patchState({ areaCodes: updatedAreaCodes });
 
-  ctx.patchState({ areaCodes: updatedAreaCodes });
+    // ✅ Sanitize payload for API
+    const { AreaCodeId, isEdited, originalAreaCode,isDeleted, ...sanitizedPayload } =
+      action.payload;
 
-  // ✅ Sanitize payload for API
-  const {
-    AreaCodeId,
-    isEdited,
-    originalAreaCode,
-    isDeleted,
-    ...sanitizedPayload
-  } = action.payload;
-
-  return this.areaCodesService.updateAreaCode(action.areaCodeId, sanitizedPayload);
-}
+    return this.areaCodesService.updateAreaCode(
+      action.areaCodeId,
+      sanitizedPayload
+    );
+  }
 
   @Action(SoftDeleteAreaCode)
   softDeleteAreaCode(
@@ -102,4 +106,3 @@ updateAreaCode(
     return this.areaCodesService.softDeleteAreaCode(action.payload);
   }
 }
-

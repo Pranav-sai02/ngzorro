@@ -1,18 +1,51 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ClientService } from '../../../services/client-service/client.service';
 import { Client } from '../../../models/Client';
+import {
+  CountryISO,
+  PhoneNumberFormat,
+  SearchCountryField,
+} from 'ngx-intl-tel-input';
 
 @Component({
   selector: 'app-client-popup',
   standalone: false,
   templateUrl: './client-popup.component.html',
-  styleUrl: './client-popup.component.css'
+  styleUrl: './client-popup.component.css',
 })
 export class ClientPopupComponent {
-showSuccess = false;
- clientForm!: FormGroup;
+  separateDialCode = false;
+  SearchCountryField = SearchCountryField;
+  CountryISO = CountryISO;
+  PhoneNumberFormat = PhoneNumberFormat;
+  preferredCountries: CountryISO[] = [
+    CountryISO.UnitedStates,
+    CountryISO.UnitedKingdom,
+  ];
+  phoneForm = new FormGroup({
+    phone: new FormControl(undefined, [Validators.required]),
+  });
+
+  changePreferredCountries() {
+    this.preferredCountries = [CountryISO.India, CountryISO.Canada];
+  }
+  // phoneForm!: FormGroup;
+  searchFields = [
+    SearchCountryField.Name,
+    SearchCountryField.DialCode,
+    SearchCountryField.Iso2,
+  ];
+
+  showSuccess = false;
+  clientForm!: FormGroup;
+  searchCountryField = SearchCountryField;
 
   ProfileImage: String | ArrayBuffer | null = null;
   defaultImage =
@@ -29,17 +62,22 @@ showSuccess = false;
 
   ngOnInit(): void {
     this.clientForm = this.fb.group({
-  CompanyName: ['', Validators.required],
-  ClientGroup: ['', Validators.required],
-  Address: [''],
-  AreaCode: [''],
-  Telephone: ['', Validators.pattern(/^\d+$/)],
-  Fax: [''],
-  Mobile: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-  WebURL: ['', Validators.pattern(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-])\/?$/i)],
-  CompanyLogo: [''],
-  IsActive: [true],
-});
+      CompanyName: ['', Validators.required],
+      ClientGroup: ['', Validators.required],
+      Address: [''],
+      AreaCode: ['', Validators.required],
+      Telephone: [undefined, [Validators.required]],
+      Fax: [undefined],
+      Mobile: [undefined, [Validators.required]],
+      WebURL: [
+        '',
+        Validators.pattern(
+          /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-])\/?$/i
+        ),
+      ],
+      CompanyLogo: [''],
+      IsActive: [true],
+    });
   }
   //  changePassword() {
   //   alert('Change password cliked');
@@ -51,18 +89,7 @@ showSuccess = false;
   onCancel(): void {
     this.close.emit();
   }
-  //  onSave() {
-  //   if (this.userForm.valid) {
-  //     // proceed with form data…
-  //     console.log(this.userForm.value);
-  //     this.showSuccess = true;
-  //     setTimeout(()=>this.showSuccess = false,3000);
 
-  //     // this.closeForm();
-  //   }
-  //}
-
-  // Handle image file selection
   toggleOptions: boolean = false;
 
   onFileSelected(event: any) {
@@ -93,82 +120,113 @@ showSuccess = false;
   }
 
   onEditClick(): void {
-  // Your logic here. For now, just log a message.
-  console.log('Edit button clicked');
-}
-
+    // Your logic here. For now, just log a message.
+    console.log('Edit button clicked');
+  }
 
   onSave() {
-  if (this.userForm.valid) {
-    const formValues = this.userForm.value;
+    if (this.userForm.valid) {
+      const formValues = this.userForm.value;
 
-    const client: Client = {
-        Name: formValues.Name,
-        
-        ClientGroup: formValues.ClientGroup,
+      const client: Client = {
+        ClientId: 0, // Or undefined/null if it's created by backend
+        ClientGroupId: 0,
+        ClientGroup: {} as any, // Set proper object if needed
+        AreaCodeId: 0,
+        AreaCodes: {} as any, // Set proper object if needed
+        ClientName: formValues.CompanyName,
+        ClaimsManager: '',
         Address: formValues.Address,
-        AreaCode: formValues.AreaCode,
-        Telephone: formValues.Telephone,
-        Fax: formValues.Fax,
-        WebURL: formValues.WebURL,
+        ClaimFormDeclaration: null,
+        ClaimFormDeclarationPlain: null,
+        Code: '',
         CompanyLogo: formValues.CompanyLogo,
+        CompanyLogoData: null,
+        DoTextExport: false,
+        Fax: formValues.Fax,
         IsActive: formValues.IsActive,
-        isDeleted: false,
-     
-    };
+        NearestClaimCentre: false,
+        OtherValidationNotes: null,
+        OtherValidationNotesPlain: null,
+        PolicyFile: '',
+        PolicyLabel: '',
+        PolicyLookup: false,
+        PolicyLookupFileData: null,
+        PolicyLookupFileName: null,
+        PolicyLookupPath: null,
+        PrintName: formValues.CompanyName,
+        ProcessClaims: false,
+        Tel: formValues.Telephone,
+        UseMembershipNumber: false,
+        Validate: false,
+        ValidationExternalFile: false,
+        ValidationLabel1: null,
+        ValidationLabel2: null,
+        ValidationLabel3: null,
+        ValidationLabel4: null,
+        ValidationLabel5: null,
+        ValidationLabel6: null,
+        ValidationOther: false,
+        ValidationWeb: false,
+        WebURL: formValues.WebURL,
+        WebValidationAVS: false,
+        WebValidationOTH: false,
+        WebValidationURL: '',
+        EnableVoucherExportOnDeathClaim: false,
+      };
 
-    this.clientService.createClient(client).subscribe({
-      next: () => {
-        this.toastr.success('User saved successfully!', 'Success');
-        this.showSuccess = true;
-        setTimeout(() => {
-          this.showSuccess = false;
-          this.closeForm();
-        }, 3000);
-      },
-      error: (err) => {
-        const errors = err?.error?.errors;
-        if (errors) {
-          const messages = Object.values(errors).flat().join('<br/>');
-          this.toastr.error(messages, 'Validation Error', {
-            enableHtml: true,
-          });
-        } else {
-          this.toastr.error(
-            err?.error?.message || 'Failed to save user',
-            'Error'
-          );
-        }
-      },
-    });
-  } else {
-    this.userForm.markAllAsTouched();
+      this.clientService.createClient(client).subscribe({
+        next: () => {
+          this.toastr.success('User saved successfully!', 'Success');
+          this.showSuccess = true;
+          setTimeout(() => {
+            this.showSuccess = false;
+            this.closeForm();
+          }, 3000);
+        },
+        error: (err) => {
+          const errors = err?.error?.errors;
+          if (errors) {
+            const messages = Object.values(errors).flat().join('<br/>');
+            this.toastr.error(messages, 'Validation Error', {
+              enableHtml: true,
+            });
+          } else {
+            this.toastr.error(
+              err?.error?.message || 'Failed to save user',
+              'Error'
+            );
+          }
+        },
+      });
+    } else {
+      this.userForm.markAllAsTouched();
 
-    const errors: string[] = [];
-    const nameControl = this.userForm.get('Name'); // Updated to Name
-    const emailControl = this.userForm.get('UserEmail');
-    const mobileNumberControl = this.userForm.get('MobileNumber');
-    const phoneNumberControl = this.userForm.get('PhoneNumber');
+      const errors: string[] = [];
+      const nameControl = this.userForm.get('Name'); // Updated to Name
+      const emailControl = this.userForm.get('UserEmail');
+      const mobileNumberControl = this.userForm.get('MobileNumber');
+      const phoneNumberControl = this.userForm.get('PhoneNumber');
 
-    if (nameControl?.hasError('required')) {
-      errors.push('Name is required.');
-    }
-    if (emailControl?.hasError('required')) {
-      errors.push('Email is required.');
-    } else if (emailControl?.hasError('email')) {
-      errors.push('Please enter a valid email address.');
-    }
-    if (mobileNumberControl?.hasError('required')) {
-      errors.push('Mobile Number is required.');
-    } else if (mobileNumberControl?.hasError('pattern')) {
-      errors.push('Please enter a valid 10-digit mobile number.');
-    }
-    if (phoneNumberControl?.hasError('pattern')) {
-      errors.push('Please enter a valid 10-digit phone number.');
-    }
+      if (nameControl?.hasError('required')) {
+        errors.push('Name is required.');
+      }
+      if (emailControl?.hasError('required')) {
+        errors.push('Email is required.');
+      } else if (emailControl?.hasError('email')) {
+        errors.push('Please enter a valid email address.');
+      }
+      if (mobileNumberControl?.hasError('required')) {
+        errors.push('Mobile Number is required.');
+      } else if (mobileNumberControl?.hasError('pattern')) {
+        errors.push('Please enter a valid 10-digit mobile number.');
+      }
+      if (phoneNumberControl?.hasError('pattern')) {
+        errors.push('Please enter a valid 10-digit phone number.');
+      }
 
-    const errorMessage = errors.join('<br/>');
-    this.toastr.error(errorMessage, 'Validation Error', { enableHtml: true });
+      const errorMessage = errors.join('<br/>');
+      this.toastr.error(errorMessage, 'Validation Error', { enableHtml: true });
+    }
   }
-}
 }

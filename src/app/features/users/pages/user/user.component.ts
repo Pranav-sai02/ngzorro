@@ -27,8 +27,7 @@ export class UserComponent implements OnInit {
   selectedUser: User | null = null; // row reference
   editedUser: User = {} as User; // detached copy for editing
 
-  defaultImage =
-    'assets/images/profile.png';
+  defaultImage = 'assets/images/profile.png';
 
   toggleOptions = false;
   saving = false; // spinner flag
@@ -44,7 +43,7 @@ export class UserComponent implements OnInit {
       field: 'Firstname',
       headerName: 'First Name',
       minWidth: 230,
-      flex:1,
+      flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
@@ -52,7 +51,7 @@ export class UserComponent implements OnInit {
       field: 'Lastname',
       headerName: 'Last Name',
       minWidth: 230,
-      flex:1,
+      flex: 1,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
@@ -60,7 +59,7 @@ export class UserComponent implements OnInit {
       field: 'UserEmail',
       headerName: 'Email',
       minWidth: 230,
-      flex:2,
+      flex: 2,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
@@ -68,7 +67,7 @@ export class UserComponent implements OnInit {
       field: 'PhoneNumber',
       headerName: 'Phone Number',
       minWidth: 230,
-      flex:1,
+      flex: 1,
       cellStyle: { borderRight: '1px solid #ccc', textAlign: 'center' },
       headerClass: 'bold-header',
     },
@@ -76,7 +75,7 @@ export class UserComponent implements OnInit {
       field: 'IsActive',
       headerName: 'Active',
       minWidth: 150,
-      flex:1,
+      flex: 1,
       cellRenderer: 'activeToggleRenderer',
       cellStyle: {
         borderRight: '1px solid #ccc',
@@ -90,7 +89,7 @@ export class UserComponent implements OnInit {
       field: 'view',
       headerName: 'View',
       minWidth: 150,
-      flex:1,
+      flex: 1,
       cellRenderer: (_: ICellRendererParams) =>
         '<i class="fas fa-eye" title="Can View / Edit" style="color: green;"></i>',
       cellStyle: {
@@ -117,7 +116,7 @@ export class UserComponent implements OnInit {
         justifyContent: 'center',
       },
       headerClass: 'bold-header',
-      // onCellClicked: (params: any) => this.softDeleteProvider(params.data),
+      onCellClicked: (params: any) => this.softDeleteProvider(params.data),
     },
   ];
 
@@ -191,6 +190,30 @@ export class UserComponent implements OnInit {
     });
   }
 
+  // ✅ Soft delete on UI only
+  softDeleteProvider(user: User): void {
+    if (!user || !this.gridApi) return;
+
+    const confirmed = confirm(
+      `Are you sure you want to delete ${user.UserEmail}?`
+    );
+    if (!confirmed) return;
+
+    // Remove from local array
+    this.users = this.users.filter((u) => u.Id !== user.Id);
+
+    // Remove from grid
+    const rowNode = this.gridApi.getRowNode(
+      user.Id?.toString() ?? user.UserEmail
+    );
+    if (rowNode) {
+      this.gridApi.applyTransaction({ remove: [rowNode.data] });
+      console.log(`[UI DELETE] Removed ${user.UserEmail} from grid`);
+    } else {
+      console.warn(`[UI DELETE] Row not found for ${user.UserEmail}`);
+    }
+  }
+
   /* === misc UI helpers === */
   clearField(
     field:
@@ -208,7 +231,8 @@ export class UserComponent implements OnInit {
     const file = event.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => (this.editedUser.ProfileImage = reader.result as string);
+    reader.onload = () =>
+      (this.editedUser.ProfileImage = reader.result as string);
     reader.readAsDataURL(file);
   }
 
@@ -220,18 +244,14 @@ export class UserComponent implements OnInit {
     console.log('Camera action triggered');
   }
 
-
   saveUserToggleStatus(updatedUser: User): void {
-  this.userService.updateUser(updatedUser).subscribe({
-    next: (res) => {
-      console.log(`IsActive status updated for ${res.UserEmail}`);
-    },
-    error: (err) => {
-      console.error('Failed to update IsActive status', err);
-    }
-  });
-}
-
-
-
+    this.userService.updateUser(updatedUser).subscribe({
+      next: (res) => {
+        console.log(`IsActive status updated for ${res.UserEmail}`);
+      },
+      error: (err) => {
+        console.error('Failed to update IsActive status', err);
+      },
+    });
+  }
 }

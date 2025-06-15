@@ -14,22 +14,17 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatButtonModule} from '@angular/material/button';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzIconModule } from 'ng-zorro-antd/icon';
-import { NzStepsModule } from 'ng-zorro-antd/steps';
-import { provideNzI18n } from 'ng-zorro-antd/i18n';
-import { MatTabsModule } from '@angular/material/tabs';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { CallerDetailsComponent } from './call-details/components/caller-details/caller-details.component';
 import { ValidationComponent } from './call-details/components/validation/validation.component';
 import { VoucherSmsComponent } from './call-details/components/voucher-sms/voucher-sms.component';
 import { ComplaintsComponent } from './call-details/components/complaints/complaints.component';
 import { DocumentsComponent } from './call-details/components/documents/documents.component';
-
+import { CallPopupComponent } from './calls/pages/call-popup/call-popup.component';
+import {MatExpansionModule} from '@angular/material/expansion'
 
 @NgModule({
-  declarations: [CallsComponent, CallDetailsComponent, CallerDetailsComponent, ValidationComponent, VoucherSmsComponent, ComplaintsComponent, DocumentsComponent,  ],
+  declarations: [CallsComponent, CallDetailsComponent, CallerDetailsComponent, ValidationComponent, VoucherSmsComponent, ComplaintsComponent, DocumentsComponent, CallPopupComponent],
   imports: [
     CommonModule,
     CallsModuleRoutingModule,
@@ -46,13 +41,10 @@ import { DocumentsComponent } from './call-details/components/documents/document
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-     NzButtonModule,//for ng-zorro
-    NzInputModule,//for ng-zorro
-    NzFormModule,//for ng-zorro
-    NzIconModule,//for ng-zorro
-     NzStepsModule,//for ng-zorro
-     MatTabsModule,//for angular material
+    NgxIntlTelInputModule,
+    MatExpansionModule
+    
   ],
-  exports: [CallsComponent, CallDetailsComponent],
+  exports: [CallsComponent, CallDetailsComponent,CallPopupComponent ],
 })
 export class CallsModuleModule {}

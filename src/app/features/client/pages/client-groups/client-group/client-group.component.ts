@@ -20,6 +20,8 @@ import { SoftDeleteButtonRendererComponent } from '../../../../../shared/compone
 import { ClientGroupService } from '../../../services/client-group-services/client-group.service';
 import { ClientGroupState } from '../../../client-group-state/client-group.state';
 import { ActiveToggleRendererComponent } from '../../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
+import { SnackbarService } from '../../../../../core/services/snackbar/snackbar.service';
+import { group } from 'node:console';
 
 @Component({
   selector: 'app-client-group',
@@ -40,6 +42,7 @@ export class ClientGroupComponent implements OnInit {
       field: 'Name',
       headerName: 'Name',
       sortable: true,
+
       flex: 1,
       minWidth: 200,
       editable: true,
@@ -84,34 +87,36 @@ export class ClientGroupComponent implements OnInit {
       headerName: 'Save',
       flex: 1,
       minWidth: 120,
-      cellRenderer: (params: any) => {
-        const isNew = !params.data.ClientGroupId;
-        const isEdited = params.data.isEdited === true;
-        const disabled = !(isNew || isEdited);
-        const disabledAttr = disabled ? 'disabled' : '';
-
+      cellRenderer: () => {
         return `
+    <style>
+      .save-icon-btn:hover .save-icon {
+        transform: scale(1.2) ;
+      }
+    </style>
     <button
-      ${disabledAttr}
+      class="save-icon-btn"
       style="
-        background-color: ${disabled ? '#ccc' : '#05b9bc'};
-        color: white;
+        background-color: white;
+        color: #333;
         border: none;
         border-radius: 8px;
         font-weight: 500;
         height: 42px;
         display: flex;
         align-items: center;
+        justify-content: center;
         padding: 0 14px;
         font-size: 1rem;
-        justify-content: center;
-        cursor: ${disabled ? 'not-allowed' : 'pointer'};
+        gap: 8px;
+        cursor: pointer;
       "
     >
-      Save
+      <i class="fas fa-save save-icon" style="color: #28a745; font-size: 1.2rem; transition: transform 0.3s ease;"></i> 
     </button>
   `;
       },
+
       cellStyle: {
         borderRight: '1px solid #ccc',
         display: 'flex',
@@ -120,21 +125,16 @@ export class ClientGroupComponent implements OnInit {
       },
       headerClass: 'bold-header',
       onCellClicked: (params: any) => {
-        const data = params.data;
-        const isNew = !data.ClientGroupId;
-        const isEdited = data.isEdited === true;
-
-        if (isNew || isEdited) {
-          this.saveRow(data);
-        }
+        this.saveRow(params.data);
       },
     },
   ];
 
   constructor(
     private store: Store,
-    private clientGroupService: ClientGroupService
-  ) { }
+    private clientGroupService: ClientGroupService,
+    private snackbarService: SnackbarService
+  ) {}
 
   defaultColDef: ColDef = {
     flex: 1,
@@ -156,12 +156,17 @@ export class ClientGroupComponent implements OnInit {
   }
 
   onCellValueChanged(event: CellValueChangedEvent): void {
-    const row = event.data;
-    const isNew = !row.ClientGroupId;
+    const updatedRow = event.data;
 
-    // Just mark the row as edited; don't save automatically
-    row.isEdited = true;
-    this.gridApi.applyTransaction({ update: [row] });
+    // 🔍 Find original row reference in rowData
+    const index = this.rowData.findIndex(
+      (r) => r === updatedRow || r.ClientGroupId === updatedRow.ClientGroupId
+    );
+
+    if (index > -1) {
+      this.rowData[index].IsEdited = true; // ✅ Update actual reference
+      this.gridApi.applyTransaction({ update: [this.rowData[index]] });
+    }
   }
 
   saveRow(row: ClientGroup): void {
@@ -171,26 +176,51 @@ export class ClientGroupComponent implements OnInit {
       row.IsActive !== null &&
       row.IsActive !== undefined;
 
-    if (isComplete) {
-      this.clientGroupService.addClientGroup(row).subscribe(
-        () => {
-          alert('Saved successfully!');
-
-          // Clear edited flag after save
-          row.IsEdited = false;
-          this.gridApi.applyTransaction({ update: [row] });
-
-          // Optionally reload
-          this.store.dispatch(new LoadClientGroups());
-        },
-        (error) => {
-          alert('Error saving area code.');
-          console.error(error);
-        }
+    if (!isComplete) {
+      this.snackbarService.showError(
+        'Please complete all fields before saving.'
       );
-    } else {
-      alert('Please complete all required fields before saving.');
+      return;
     }
+
+    const isNew = !row.ClientGroupId;
+
+    // Skip save if not edited and not new
+    if (!isNew && !row.IsEdited) {
+      this.snackbarService.showInfo('No changes to save.');
+      return;
+    }
+
+    const saveObservable = isNew
+      ? this.clientGroupService.addClientGroup(row)
+      : this.clientGroupService.updateClientGroup(row);
+
+    saveObservable.subscribe({
+      next: (savedRow: ClientGroup) => {
+        this.snackbarService.showSuccess('Saved successfully!');
+
+        // ✅ Assign new ID if it's a fresh row
+        if (isNew && savedRow?.ClientGroupId) {
+          row.ClientGroupId = savedRow.ClientGroupId;
+        }
+
+        row.IsEdited = false;
+
+        // ✅ Refresh grid UI
+        this.gridApi.applyTransaction({ update: [row] });
+
+        // ✅ Reload from store (ensures proper state)
+        this.store.dispatch(new LoadClientGroups());
+
+        // ✅ Optional: refresh cells to force UI update (you can keep or remove this)
+        setTimeout(() => {
+          this.gridApi.redrawRows();
+        }, 100);
+      },
+      error: () => {
+        this.snackbarService.showError('Failed to save. Try again.');
+      },
+    });
   }
 
   getRowClass = (params: any) => {
@@ -198,9 +228,16 @@ export class ClientGroupComponent implements OnInit {
     return !params.data.ClientGroupId ? 'temporary-row' : '';
   };
 
-  softDeleteProvider(areaCode: ClientGroup): void {
-    const updatedAreaCode = { ...areaCode, isDeleted: true };
-    this.store.dispatch(new SoftDeleteClientGroup(updatedAreaCode));
+  softDeleteProvider(clientGroup: ClientGroup): void {
+    // const updatedAreaCode = { ...areaCode, isDeleted: true };
+
+    this.rowData = this.rowData.filter(
+      (group) => group.ClientGroupId !== clientGroup.ClientGroupId
+    );
+
+    // this.store.dispatch(new SoftDeleteClientGroup(updatedAreaCode));
+
+    this.snackbarService.showSuccess('Removed successfully!');
   }
 
   addRow(): void {

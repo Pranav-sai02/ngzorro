@@ -4,6 +4,7 @@ import { ServiceProviderTypes } from '../../models/ServiceProviderTypes';
 import { ServiceProviderTypesService } from '../../services/serviceProvider-types/service-provider-types.service';
 import { ActiveToggleRendererComponent } from '../../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
 import { SoftDeleteButtonRendererComponent } from '../../../../../shared/component/soft-delete-button-renderer/soft-delete-button-renderer.component';
+import { SnackbarService } from '../../../../../core/services/snackbar/snackbar.service';
 
 @Component({
   selector: 'app-service-providers-types',
@@ -30,7 +31,7 @@ export class ServiceProvidersTypesComponent implements OnInit {
       field: 'Description',
       headerName: 'Description',
       flex: 2,
-      minWidth: 90,
+      minWidth: 200,
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
     },
@@ -60,7 +61,7 @@ export class ServiceProvidersTypesComponent implements OnInit {
         justifyContent: 'center',
       },
       headerClass: 'bold-header',
-      // onCellClicked: (params: any) => this.softDeleteProvider(params.data),
+       onCellClicked: (params: any) => this.softDelete(params.data),
     },
   ];
 
@@ -70,7 +71,7 @@ export class ServiceProvidersTypesComponent implements OnInit {
     resizable: true,
   };
 
-  constructor(private spSvc: ServiceProviderTypesService) {}
+  constructor(private spSvc: ServiceProviderTypesService, private snackbarService: SnackbarService) {}
 
   ngOnInit(): void {
     this.spSvc.getAll().subscribe((data) => (this.rows = data));
@@ -83,5 +84,25 @@ export class ServiceProvidersTypesComponent implements OnInit {
 
   onFitColumns() {
     this.gridApi?.sizeColumnsToFit();
+  }
+  softDelete(row: ServiceProviderTypes): void {
+    // Remove from UI
+    this.rows = this.rows.filter(
+      r => r.ServiceProvideCode !== row.ServiceProvideCode
+    );
+    this.rows = [...this.rows]; // trigger Angular UI update
+
+    // Show success toast
+    this.snackbarService.showSuccess('Removed successfully');
+
+    // Soft delete API call
+    this.spSvc.softDeleteServiceProviderType(row.ServiceProviderId).subscribe({
+      next: () => {
+        // Optional: add refresh logic
+      },
+      // error: () => {
+      //   this.snackbarService.showError('Soft delete failed');
+      // }
+    });
   }
 }

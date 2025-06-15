@@ -16,4 +16,5 @@ export interface User {
   createdByUserId?: number;
   createdDate?: Date;
   modifiedDate?: Date;
+  IsDeleted?: boolean;
 }

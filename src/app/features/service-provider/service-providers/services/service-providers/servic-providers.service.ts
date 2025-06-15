@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ServicProvidersService {
-  private baseUrl = 'http://fusionedge.runasp.net/ServiceProvider'; // Make sure db.json uses this endpoint
-
+  private baseUrl = 'http://fusionedge.runasp.net/ServiceProvider'; 
+ 
   constructor(private http: HttpClient) {}
 
   getServiceProviders(): Observable<ServiceProviders[]> {
@@ -31,4 +31,8 @@ export class ServicProvidersService {
   deleteServiceProvider(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  softDeleteServiceProvider(id: number): Observable<any> {
+  return this.http.patch(`${this.baseUrl}/${id}`, { IsDeleted: true });
+}
 }
