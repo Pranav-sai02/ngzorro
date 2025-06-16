@@ -9,7 +9,7 @@
   transition: width 0.3s ease;
 }
 
-/* Collapsed Sidebar */
+/* Collapsed sidebar */
 .sidebar.collapsed {
   width: 80px;
 }
@@ -18,12 +18,15 @@
   padding-left: 16px;
   margin-bottom: 30px;
   height: 44px;
+  font-family: "Inter", sans-serif;
   font-size: 32px;
   font-weight: 900;
   line-height: 100%;
+  position: relative;
   transition: padding-left 0.3s ease;
 }
 
+/* Adjust logo padding when collapsed */
 .sidebar.collapsed .logo {
   padding-left: 12px;
 }
@@ -56,7 +59,7 @@
   transition: opacity 0.3s ease;
 }
 
-/* Hide section titles in collapsed view */
+/* Hide section title when collapsed */
 .sidebar.collapsed .section-title {
   opacity: 0;
   height: 0;
@@ -66,22 +69,20 @@
 
 .menu-item {
   display: flex;
-  flex-direction: column;   /* Stack icon and label vertically */
   align-items: center;
-  justify-content: center;
-  height: 72px;              /* Fixed height for consistent layout */
-  padding: 8px 12px;
+  line-height: 1;
+  padding: 13px 30px;
   font-size: 0.95rem;
   color: white;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease-in-out, border-radius 0.2s, padding 0.3s ease;
   border-radius: 8px;
-  margin: 6px 0;
-  text-align: center;
+  margin: 2px 0;
 }
 
+/* Adjust padding for collapsed menu items */
 .sidebar.collapsed .menu-item {
-  padding: 8px 12px;
+  padding: 13px 16px;
 }
 
 .menu-item.active {
@@ -90,18 +91,19 @@
 }
 
 .icon-img {
-  width: 26px;
-  height: 26px;
-  margin-bottom: 4px;
-  transition: all 0.3s ease;
+  display: inline-block;
+  vertical-align: middle;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  transition: margin 0.3s ease;
 }
 
-/* Center icon even in collapsed mode */
+/* Remove icon margin when collapsed */
 .sidebar.collapsed .icon-img {
-  margin-bottom: 0;
+  margin-right: 0;
 }
 
-/* Divider between groups */
 .group-divider {
   height: 1px;
   background-color: white;
@@ -110,22 +112,22 @@
   border: none;
 }
 
-/* Menu label */
 .menu-item span {
   font-family: "Inter", sans-serif;
   font-weight: 600;
-  font-size: 13px;
-  line-height: 1.2;
-  text-align: center;
-  white-space: normal;        /* Allow wrapping */
-  word-break: break-word;
-  max-width: 100%;
-  height: 32px;               /* Reserve space to avoid shifting */
+  font-size: 18px;
+  line-height: 22px;
+  width: auto;
+  display: inline-block;
+  white-space: nowrap;
   overflow: hidden;
-  display: block;
+  text-overflow: ellipsis;
+  transition: opacity 0.2s ease;
 }
 
-/* Hide label text in collapsed sidebar */
+/* Hide label text in collapsed view */
 .sidebar.collapsed .menu-item span {
-  display: none;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }
