@@ -11,6 +11,7 @@ import { SidebarService } from '../../services/sidebar.service';
 export class SidebarComponent implements OnInit {
   groupedMenu: { [section: string]: Sidebar[] } = {}; // Grouped menu items by section
   topLevelMenuItems: Sidebar[] = []; // Items like Home/Dashboard shown outside group
+   isCollapsed: boolean = true;// sidebar starts collapsed
 
   // Display order for sidebar sections
   sectionOrder: string[] = [

@@ -6,18 +6,26 @@
   padding-top: 15px;
   overflow-y: auto;
   font-family: "Inter", Arial, Helvetica, sans-serif;
+  transition: width 0.3s ease;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+  width: 80px;
 }
 
 .logo {
   padding-left: 16px;
   margin-bottom: 30px;
-  width: 219px;
   height: 44px;
-  font-family: "Inter", sans-serif;
   font-size: 32px;
   font-weight: 900;
   line-height: 100%;
-  position: relative;
+  transition: padding-left 0.3s ease;
+}
+
+.sidebar.collapsed .logo {
+  padding-left: 12px;
 }
 
 .logo-text {
@@ -32,7 +40,7 @@
 }
 
 .edge {
-  color: #00b4b6; /* adjust this teal/cyan shade as needed */
+  color: #00b4b6;
 }
 
 .sidebar_menu {
@@ -45,19 +53,35 @@
   font-size: 0.85rem;
   text-transform: uppercase;
   padding: 10px 16px 4px;
+  transition: opacity 0.3s ease;
 }
+
+/* Hide section titles in collapsed view */
+.sidebar.collapsed .section-title {
+  opacity: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 .menu-item {
   display: flex;
+  flex-direction: column;   /* Stack icon and label vertically */
   align-items: center;
-  line-height: 1;
-  padding: 13px 30px;
+  justify-content: center;
+  height: 72px;              /* Fixed height for consistent layout */
+  padding: 8px 12px;
   font-size: 0.95rem;
-
   color: white;
   cursor: pointer;
-  transition: background 0.2s ease-in-out, border-radius 0.2s;
+  transition: all 0.3s ease;
   border-radius: 8px;
-  margin: 2px o;
+  margin: 6px 0;
+  text-align: center;
+}
+
+.sidebar.collapsed .menu-item {
+  padding: 8px 12px;
 }
 
 .menu-item.active {
@@ -66,13 +90,18 @@
 }
 
 .icon-img {
-  display: inline-block;
-  vertical-align: middle;
-  width: 24px;
-  height: 24px;
-  margin-right: 10px;
+  width: 26px;
+  height: 26px;
+  margin-bottom: 4px;
+  transition: all 0.3s ease;
 }
 
+/* Center icon even in collapsed mode */
+.sidebar.collapsed .icon-img {
+  margin-bottom: 0;
+}
+
+/* Divider between groups */
 .group-divider {
   height: 1px;
   background-color: white;
@@ -81,15 +110,22 @@
   border: none;
 }
 
+/* Menu label */
 .menu-item span {
   font-family: "Inter", sans-serif;
   font-weight: 600;
-  font-size: 18px;
-  line-height: 22px;
-  width: 52px;
-  height: 22px;
-  display: inline-block;
-  white-space: nowrap;
+  font-size: 13px;
+  line-height: 1.2;
+  text-align: center;
+  white-space: normal;        /* Allow wrapping */
+  word-break: break-word;
+  max-width: 100%;
+  height: 32px;               /* Reserve space to avoid shifting */
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: block;
+}
+
+/* Hide label text in collapsed sidebar */
+.sidebar.collapsed .menu-item span {
+  display: none;
 }
