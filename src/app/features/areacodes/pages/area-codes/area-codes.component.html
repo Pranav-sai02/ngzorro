@@ -1,4 +1,4 @@
-<div class="ag-theme-alpine" style="height: 500px; width: 100%">
+<!-- <div class="ag-theme-alpine" style="height: 500px; width: 100%">
   <ag-grid-angular
     class="ag-grid-responsive"
     [rowData]="AreaCode"
@@ -20,5 +20,19 @@
   >
   </ag-grid-angular>
 </div>
- 
+  -->
+
+  <app-ag-grid-wrapper
+  [rowData]="AreaCode"
+  [columnDefs]="columnDefs"
+  [defaultColDef]="defaultColDef"
+  [rowClassRules]="{}"
+  [getRowClass]="getRowClass"
+  [components]="{
+    activeToggleRenderer: ActiveToggleRendererComponent,
+    softDeleteRenderer: SoftDeleteRendererComponent
+  }"
+  [getContextMenuItems]="getContextMenuItems"
+  (cellValueChanged)="onCellValueChanged($event)">
+</app-ag-grid-wrapper>
  

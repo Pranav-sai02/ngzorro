@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CallsModuleRoutingModule } from './calls-module-routing.module';
-import { CallsComponent } from './calls/pages/calls/calls.component';
+import { CasesComponent } from './calls/pages/cases/cases.component';
 import { CallDetailsComponent } from './call-details/pages/call-details/call-details.component';
 import { AgGridModule } from 'ag-grid-angular';
 import { InputIconModule } from 'primeng/inputicon';
@@ -24,7 +24,7 @@ import { CallPopupComponent } from './calls/pages/call-popup/call-popup.componen
 import {MatExpansionModule} from '@angular/material/expansion'
 
 @NgModule({
-  declarations: [CallsComponent, CallDetailsComponent, CallerDetailsComponent, ValidationComponent, VoucherSmsComponent, ComplaintsComponent, DocumentsComponent, CallPopupComponent],
+  declarations: [CasesComponent, CallDetailsComponent, CallerDetailsComponent, ValidationComponent, VoucherSmsComponent, ComplaintsComponent, DocumentsComponent, CallPopupComponent],
   imports: [
     CommonModule,
     CallsModuleRoutingModule,
@@ -45,6 +45,6 @@ import {MatExpansionModule} from '@angular/material/expansion'
     MatExpansionModule
     
   ],
-  exports: [CallsComponent, CallDetailsComponent,CallPopupComponent ],
+  exports: [CasesComponent, CallDetailsComponent,CallPopupComponent ],
 })
 export class CallsModuleModule {}

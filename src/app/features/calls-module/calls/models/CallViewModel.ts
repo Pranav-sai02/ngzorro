@@ -1,4 +1,4 @@
-export interface Call {
+export interface CallViewModel {
   status: string;
   caseRef: string;
   caseNo: string;
@@ -8,7 +8,4 @@ export interface Call {
   client: string;
   type: string;
   funeralDate: string;
-  callerFirstName: string;
-  callerLastName: string;
-  
 }

@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   SERVICES_PAGE: `${environment.apiBaseUrl}/Service`,
   CLIENTGROUP: `${environment.apiBaseUrl}/ClientGroup`,
   CLIENT: `${environment.apiBaseUrl}/Client`,
+  CALLS: `${environment.apiBaseUrl}/CaseDetails`,
   
   
   

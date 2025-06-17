@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Call } from '../../models/Call';
+import { Call } from '../../models/Cases';
 import { Observable } from 'rxjs';
+import { API_ENDPOINTS } from '../../../../../constants/api-endpoints';
 
 /**
  * Service to handle operations related to funeral call records.
@@ -12,7 +13,7 @@ import { Observable } from 'rxjs';
 export class CallsService {
 
   // API endpoint for funeral records
-  private apiUrl = 'http://localhost:3000/funeralRecords'; // Replace with actual backend endpoint
+  private apiUrl = API_ENDPOINTS.CALLS; // Replace with actual backend endpoint
 
   constructor(private http: HttpClient) {}
 

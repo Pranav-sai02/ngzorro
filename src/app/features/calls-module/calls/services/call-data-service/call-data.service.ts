@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Call } from '../../models/Call';
+import { Call } from '../../models/Cases';
 
 /**
  * Manages the currently selected call across components using a BehaviorSubject.

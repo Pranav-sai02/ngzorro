@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CallsComponent } from './calls.component';
+import { AgGridWrapperComponent } from './ag-grid-wrapper.component';
 
-describe('CallsComponent', () => {
-  let component: CallsComponent;
-  let fixture: ComponentFixture<CallsComponent>;
+describe('AgGridWrapperComponent', () => {
+  let component: AgGridWrapperComponent;
+  let fixture: ComponentFixture<AgGridWrapperComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CallsComponent]
+      declarations: [AgGridWrapperComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CallsComponent);
+    fixture = TestBed.createComponent(AgGridWrapperComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

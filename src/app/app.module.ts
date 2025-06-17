@@ -46,6 +46,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './core/interceptors/error.interceptor';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CallsModuleModule } from "./features/calls-module/calls-module.module";
+import { AgGridWrapperComponent } from './shared/ag-grid-wrapper/ag-grid-wrapper.component';
 
 ModuleRegistry.registerModules([AllEnterpriseModule]);
 
@@ -72,6 +73,7 @@ ModuleRegistry.registerModules([AllEnterpriseModule]);
     ClientComponent,
     ClientGroupComponent,
     ClientPopupComponent,
+    AgGridWrapperComponent,
   ],
   imports: [
     BrowserModule,

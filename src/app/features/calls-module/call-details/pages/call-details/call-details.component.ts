@@ -5,7 +5,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 import { SOUTH_AFRICAN_LANGUAGES } from '../../../../../constants/south-african-languages';
-import { Call } from '../../../calls/models/Call';
+import { Call } from '../../../calls/models/Cases';
 import { CallDataService } from '../../../calls/services/call-data-service/call-data.service';
 import { ClientService } from '../../../../client/services/client-service/client.service';
 

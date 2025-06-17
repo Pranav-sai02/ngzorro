@@ -1,26 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ColDef, GridApi, GridOptions, ICellRendererParams, CellClickedEvent } from 'ag-grid-community';
+import {
+  ColDef,
+  GridApi,
+  ICellRendererParams,
+  CellClickedEvent,
+  GridReadyEvent
+} from 'ag-grid-community';
 
 import { ActiveToggleRendererComponent } from '../../../../../shared/component/active-toggle-renderer/active-toggle-renderer.component';
-import { Call } from '../../models/Call';
+import { Call } from '../../models/Cases';
+import { CallViewModel } from '../../models/CallViewModel';
 import { CallsService } from '../../services/call-services/calls.service';
 import { CallDataService } from '../../services/call-data-service/call-data.service';
 
 @Component({
   selector: 'app-calls',
   standalone: false,
-  templateUrl: './calls.component.html',
-  styleUrl: './calls.component.css',
+  templateUrl: './cases.component.html',
+  styleUrl: './cases.component.css',
 })
-export class CallsComponent implements OnInit {
+export class CasesComponent implements OnInit {
   ActiveToggleRendererComponent = ActiveToggleRendererComponent;
 
-  Cases: Call[] = [];
+  Cases: CallViewModel[] = []; // ViewModel for displaying in grid
+  private calls: Call[] = [];   // Full data used internally
+
   gridApi!: GridApi;
 
-  // Column configuration for AG Grid
-  columnDefs: ColDef<Call>[] = [
+  // === AG Grid Columns ===
+  columnDefs: ColDef<CallViewModel>[] = [
     {
       field: 'status',
       headerName: 'Status',
@@ -39,16 +48,20 @@ export class CallsComponent implements OnInit {
       cellRenderer: (params: ICellRendererParams) =>
         `<a style="color:blue;cursor:pointer;text-decoration:underline;">${params.value}</a>`,
       onCellClicked: (event: CellClickedEvent) => {
-        const selectedCall = event.data;
-        this.callDataService.setSelectedCall(selectedCall);
-
-        const queryParams = {
-          callRef: selectedCall.caseRef,
-          callerName: `${selectedCall.callerFirstName} ${selectedCall.callerLastName}`,
-          client: selectedCall.client,
-        };
-
-        this.router.navigate(['/cases/case-details'], { queryParams });
+        const viewModel: CallViewModel = event.data;
+        const selectedCall = this.calls.find(
+          c => c.CaseReferenceNumber === viewModel.caseRef
+        );
+        if (selectedCall) {
+          this.callDataService.setSelectedCall(selectedCall);
+          this.router.navigate(['/cases/case-details'], {
+            queryParams: {
+              callRef: viewModel.caseRef,
+              callerName: viewModel.callerName,
+              client: viewModel.client,
+            },
+          });
+        }
       },
       cellStyle: { borderRight: '1px solid #ccc' },
       headerClass: 'bold-header',
@@ -136,8 +149,7 @@ export class CallsComponent implements OnInit {
   }
 
   // === Grid Events ===
-
-  onGridReady(params: any): void {
+  onGridReady(params: GridReadyEvent): void {
     this.gridApi = params.api;
     this.resizeGrid();
   }
@@ -150,33 +162,49 @@ export class CallsComponent implements OnInit {
     this.gridApi?.sizeColumnsToFit();
   }
 
-  // === Data Operations ===
-
+  // === Data Fetching and Mapping ===
   loadUsers(): void {
-    this.callService.getUsers().subscribe((data) => {
-      this.Cases = data;
+    this.callService.getUsers().subscribe((data: Call[]) => {
+      this.calls = data;
+
+      this.Cases = data.map((call) => ({
+        status: call.CaseStatus,
+        caseRef: call.CaseReferenceNumber,
+        caseNo: call.CaseNumber,
+        caseDate: call.CaseCreatedDate,
+        callerName: call.CaseCaller
+          ? `${call.CaseCaller.CallerFirstName} ${call.CaseCaller.CallerLastName}`
+          : '',
+        deceasedName: '', // Can be populated later
+        client: call.ClientId?.toString() ?? 'N/A',
+        type: '', // Can be populated later
+        funeralDate: '', // Can be populated later
+      }));
+
       this.resizeGrid();
     });
   }
 
-  // === Row Click Navigation ===
-
+  // === Optional Row Click Handler (if used separately) ===
   onRowClicked(event: any): void {
-    const call: Call = event.data;
+    const viewModel: CallViewModel = event.data;
+    const fullCall = this.calls.find(
+      c => c.CaseReferenceNumber === viewModel.caseRef
+    );
 
-    this.callDataService.setSelectedCall(call); // Optionally persist selected call
-
-    const queryParams = {
-      callRef: call.caseRef,
-      callerName: `${call.callerFirstName} ${call.callerLastName}`,
-      client: call.client,
-    };
-
-    this.router.navigate(['/cases/case-details'], { queryParams });
+    if (fullCall) {
+      this.callDataService.setSelectedCall(fullCall);
+      this.router.navigate(['/cases/case-details'], {
+        queryParams: {
+          callRef: viewModel.caseRef,
+          callerName: viewModel.callerName,
+          client: viewModel.client,
+        },
+      });
+    }
   }
 
-  // === Helpers ===
-
+  // === Grid Resize Helper ===
   private resizeGrid(): void {
     if (this.gridApi) {
       setTimeout(() => this.gridApi.sizeColumnsToFit(), 100);

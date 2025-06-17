@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CallsComponent } from './calls/pages/calls/calls.component';
+import { CasesComponent } from './calls/pages/cases/cases.component';
 import { CallDetailsComponent } from './call-details/pages/call-details/call-details.component';
 import { CallPopupComponent } from './calls/pages/call-popup/call-popup.component';
 
@@ -8,7 +8,7 @@ const routes: Routes = [
   // Add your routes here
   {
     path: '',
-    component: CallsComponent, // 👈 Load this when path is '/calls'
+    component: CasesComponent, // 👈 Load this when path is '/calls'
     title: 'Cases',
     data: { breadcrumb: 'Call Centre / Cases' },
   },
