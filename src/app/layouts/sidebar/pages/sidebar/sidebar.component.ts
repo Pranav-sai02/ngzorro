@@ -30,6 +30,22 @@ export class SidebarComponent implements OnInit {
     'General', // Fallback/default group
   ];
 
+  list!: [
+    'Call Centre',
+    'Configuration',
+    'Company',
+    'Rating Questions',
+    'Client',
+    'Services',
+    'Transport',
+    'Admin',
+    'Import',
+    'Reports',
+    'Sms',
+    'Security',
+    'General'
+  ];
+
   constructor(private sidebarService: SidebarService) {}
 
   ngOnInit(): void {

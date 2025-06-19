@@ -1,21 +1,22 @@
 .sidebar {
-  width: 250px;
+  width: 250px; /* default expanded width */
   height: 100vh;
   background-color: #003572;
   color: white;
   padding-top: 15px;
   overflow-y: auto;
+  scrollbar-width: none; /* hide default scrollbar in Firefox */
   font-family: "Inter", Arial, Helvetica, sans-serif;
-  transition: width 0.3s ease-in-out;
+  transition: width 0.3s ease-in-out; /* smooth collapse/expand */
 }
 
 .sidebar.collapsed {
-  width: 80px;
+  width: 80px; /* width when collapsed */
 }
 
 /* --- Logo --- */
 .logo {
-  padding-left: 16px;
+  padding-left: 16px; /* standard padding */
   margin-bottom: 30px;
   height: 44px;
   font-family: "Inter", sans-serif;
@@ -23,11 +24,11 @@
   font-weight: 900;
   line-height: 100%;
   position: relative;
-  transition: padding-left 0.3s ease-in-out;
+  transition: padding-left 0.3s ease-in-out; /* logo shifts left on collapse */
 }
 
 .sidebar.collapsed .logo {
-  padding-left: 12px;
+  padding-left: 12px; /* smaller left padding in collapsed mode */
 }
 
 .logo-text {
@@ -42,7 +43,7 @@
 }
 
 .edge {
-  color: #00b4b6;
+  color: #00b4b6; /* accent brand color */
 }
 
 /* --- Menu Section --- */
@@ -60,10 +61,10 @@
 }
 
 .sidebar.collapsed .section-title {
-  opacity: 0;
+  opacity: 0; /* hide title when collapsed */
   height: 0;
   padding: 0;
-  overflow: hidden;
+  overflow: hidden; /* prevent layout shift */
 }
 
 /* --- Menu Items --- */
@@ -71,22 +72,22 @@
   display: flex;
   align-items: center;
   line-height: 1;
-  height: 44px; /* 🔒 fixed height for uniform items */
+  height: 44px; /* consistent row height */
   padding: 7px 27px;
   font-size: 0.95rem;
   color: white;
   cursor: pointer;
-  transition: background 0.3s ease-in-out, border-radius 0.3s ease-in-out, padding 0.3s ease-in-out;
+  transition: background 0.5s ease-in-out, border-radius 0.5s ease-in-out, padding 0.5s ease-in-out;
   border-radius: 8px;
   margin: 2px 0;
 }
 
 .sidebar.collapsed .menu-item {
-  padding: 7px 27px; /* ⛔ Avoid increasing padding vertically */
+  padding: 7px 27px; /* don't increase vertical space to avoid jump */
 }
 
 .menu-item.active {
-  background-color: #05b9bc;
+  background-color: #05b9bc; /* highlight for active item */
   border-radius: 40px;
 }
 
@@ -97,11 +98,11 @@
   height: 24px;
   margin-right: 10px;
   transition: margin 0.3s ease-in-out;
-  flex-shrink: 0; /* 🛡️ Prevents shrinking */
+  flex-shrink: 0; /* prevent shrinking when label disappears */
 }
 
 .sidebar.collapsed .icon-img {
-  margin-right: 0;
+  margin-right: 0; /* icon centers in collapsed view */
 }
 
 /* --- Divider --- */
@@ -119,17 +120,17 @@
   font-weight: 600;
   font-size: 18px;
   line-height: 22px;
-  height: 22px; /* 🔒 Prevent vertical collapsing */
+  height: 22px; /* fixes layout shift in transition */
   width: auto;
   display: inline-block;
-  white-space: nowrap;
+  white-space: nowrap; /* prevent wrapping */
   overflow: hidden;
   text-overflow: ellipsis;
   transition: opacity 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
 .sidebar.collapsed .menu-item span {
-  opacity: 0;
+  opacity: 0; /* hide label when collapsed */
   width: 0;
   overflow: hidden;
 }

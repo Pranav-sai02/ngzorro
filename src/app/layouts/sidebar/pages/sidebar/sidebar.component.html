@@ -26,7 +26,7 @@
         [src]="'assets/icons/' + (item.Icon || 'default.png')"
         [alt]="item.DisplayName + ' Icon'"
       />
-      <span *ngIf="!isCollapsed">{{ item.DisplayName }}</span>
+      <span class="label">{{ item.DisplayName }}</span>
     </div>
 
     <!-- Grouped menu items -->
@@ -39,6 +39,7 @@
       </div>
 
       <!-- Menu items within group -->
+       D
       <div
         class="menu-item"
         *ngFor="let item of section.value"
@@ -50,7 +51,7 @@
           [src]="'assets/icons/' + (item.Icon || 'default.png')"
           [alt]="item.DisplayName + ' Icon'"
         />
-        <span *ngIf="!isCollapsed">{{ item.DisplayName }}</span>
+        <span class="label">{{ item.DisplayName }}</span>
       </div>
     </ng-container>
   </div>

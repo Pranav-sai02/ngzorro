@@ -19,6 +19,8 @@ export class BreadcrumbComponent {
     '/service-provider/types',
     '/client-group',
     '/cases/case-details',
+    '/home',
+    '/dashboard',
   ];
 
   constructor(
