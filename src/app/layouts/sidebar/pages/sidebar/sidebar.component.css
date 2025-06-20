@@ -6,9 +6,7 @@
   padding-top: 15px;
   overflow-y: auto;
   scrollbar-width: none; /* hide default scrollbar in Firefox */
-  /* font-family: "Inter", Arial, Helvetica, sans-serif; */
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
+  font-family: "Inter", Arial, Helvetica, sans-serif;
   transition: width 0.3s ease-in-out; /* smooth collapse/expand */
 }
 
@@ -78,19 +76,10 @@
   padding: 7px 27px;
   font-size: 0.95rem;
   color: white;
-  /* cursor: pointer; */
+  cursor: pointer;
   transition: background 0.5s ease-in-out, border-radius 0.5s ease-in-out, padding 0.5s ease-in-out;
   border-radius: 8px;
   margin: 2px 0;
-  text-decoration: none; /* remove underline */
-}
-
-.menu-item:hover,
-.menu-item:focus {
-  background-color: rgba(255, 255, 255, 0.1);
-  outline: none;
-  text-decoration: none;
-  
 }
 
 .sidebar.collapsed .menu-item {
@@ -144,4 +133,22 @@
   opacity: 0; /* hide label when collapsed */
   width: 0;
   overflow: hidden;
+}
+
+.sidebar-toggle {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 16px;
+}
+
+.sidebar-toggle button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.sidebar-toggle button:hover {
+  color: #00b4b6;
 }

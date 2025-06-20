@@ -20,14 +20,15 @@ export class SidebarComponent implements OnInit {
     'Configuration',
     'Company',
     'Rating Questions',
+    'cases',
     'Client',
-    'Security',
     'Services',
     'Transport',
     'Admin',
     'Import',
     'Reports',
     'Sms',
+    'Security',
     'General' // fallback group
   ];
 
@@ -67,29 +68,19 @@ export class SidebarComponent implements OnInit {
   private groupBySection(items: Sidebar[]): { [section: string]: Sidebar[] } {
     const grouped: { [section: string]: Sidebar[] } = {};
 
-    // Optional alias map for remapping certain paths to defined sections
-    const sectionAliasMap: { [key: string]: string } = {
-      cases: 'Call Centre' // Add more mappings if needed
-    };
-
     items.forEach(item => {
       const pathParts = item.MenuPath.split('/');
-      const sectionKeyRaw = pathParts[0] || 'General';
-      const sectionKey = sectionKeyRaw.toLowerCase();
+      const sectionKey = pathParts[0] || 'General';
+      const section = sectionKey === 'Cases' ? 'Call Centre' :
+        this.sectionOrder.includes(sectionKey) ? sectionKey : 'General';
 
-      // Check alias mapping or fall back to case-insensitive match in sectionOrder
-      const mappedSection =
-        sectionAliasMap[sectionKey] ||
-        this.sectionOrder.find(section => section.toLowerCase() === sectionKey) ||
-        'General';
-
-      if (!grouped[mappedSection]) {
-        grouped[mappedSection] = [];
+      if (!grouped[section]) {
+        grouped[section] = [];
       }
-      grouped[mappedSection].push(item);
+      grouped[section].push(item);
     });
 
-    // Sort each section's items by MenuId
+    // Sort within each group by MenuId
     for (const section in grouped) {
       grouped[section].sort((a, b) => a.MenuId - b.MenuId);
     }

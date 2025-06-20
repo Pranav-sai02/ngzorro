@@ -1,10 +1,5 @@
-<!-- <div
-  class="sidebar"
-  [class.collapsed]="isCollapsed"
-  (mouseenter)="isCollapsed = false"
-  (mouseleave)="isCollapsed = true"
->
-
+<nav class="sidebar" [class.collapsed]="isCollapsed" (mouseenter)="isCollapsed = false" (mouseleave)="isCollapsed = true">
+  <!-- Logo -->
   <div class="logo">
     <div class="logo-text">
       <span class="fusion"></span>
@@ -12,12 +7,12 @@
     </div>
   </div>
 
-
+  <!-- Menu -->
   <div class="sidebar_menu">
-  
-    <div
-      class="menu-item"
+    <!-- Top-level Menu Items like Home / Dashboard -->
+    <a
       *ngFor="let item of topLevelMenuItems"
+      class="menu-item"
       [routerLink]="['/' + item.MenuViewName.toLowerCase()]"
       routerLinkActive="active"
     >
@@ -27,103 +22,28 @@
         [alt]="item.DisplayName + ' Icon'"
       />
       <span class="label">{{ item.DisplayName }}</span>
-    </div>
+    </a>
 
-   
-    <ng-container *ngFor="let section of groupedMenu | keyvalue">
-      <hr class="group-divider" />
-
-      
-      <div class="section-title" *ngIf="!isCollapsed">
-        {{ section.key }}
-      </div>
-
-   
-       
-      <div
-        class="menu-item"
-        *ngFor="let item of section.value"
-        [routerLink]="['/' + item.MenuViewName.toLowerCase()]"
-        routerLinkActive="active"
-      >
-        <img
-          class="icon-img"
-          [src]="'assets/icons/' + (item.Icon || 'default.png')"
-          [alt]="item.DisplayName + ' Icon'"
-        />
-        <span class="label">{{ item.DisplayName }}</span>
-      </div>
-    </ng-container>
-  </div>
-</div> -->
-
-<!-- Sidebar Navigation -->
-<nav
-  class="sidebar"
-  [class.collapsed]="isCollapsed"
-  (mouseenter)="isCollapsed = false"
-  (mouseleave)="isCollapsed = true"
-  role="navigation"
-  aria-label="Main Sidebar"
->
-  <!-- Logo Section -->
-  <div class="logo">
-    <div class="logo-text">
-      <span class="fusion" aria-hidden="true"></span>
-      <span class="edge" *ngIf="!isCollapsed">FusionEdge</span>
-    </div>
-  </div>
-
-  <!-- Menu Section -->
-  <div class="sidebar_menu">
-
-    <!-- Top-level menu items (e.g., Home, Dashboard) -->
-    <ng-container *ngFor="let item of topLevelMenuItems; trackBy: trackByMenuId">
-      <a
-        class="menu-item"
-        [routerLink]="['/' + item.MenuViewName.toLowerCase()]"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        tabindex="0"
-        role="link"
-      >
-        <img
-          class="icon-img"
-          [src]="'assets/icons/' + (item.Icon || 'default.png')"
-          [alt]="item.DisplayName + ' Icon'"
-        />
-        <span class="label">{{ item.DisplayName }}</span>
-      </a>
-    </ng-container>
-
-    <!-- Grouped menu items, ordered using sectionOrder -->
+    <!-- Ordered Sections from sectionOrder -->
     <ng-container *ngFor="let section of sectionOrder">
       <ng-container *ngIf="groupedMenu[section]">
         <hr class="group-divider" />
-
-        <!-- Section title -->
         <div class="section-title" *ngIf="!isCollapsed">{{ section }}</div>
 
-        <!-- Menu items under the section -->
-        <ng-container *ngFor="let item of groupedMenu[section]; trackBy: trackByMenuId">
-          <a
-            class="menu-item"
-            [routerLink]="['/' + item.MenuViewName.toLowerCase()]"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-            tabindex="0"
-            role="link"
-          >
-            <img
-              class="icon-img"
-              [src]="'assets/icons/' + (item.Icon || 'default.png')"
-              [alt]="item.DisplayName + ' Icon'"
-            />
-            <span class="label">{{ item.DisplayName }}</span>
-          </a>
-        </ng-container>
+        <a
+          *ngFor="let item of groupedMenu[section]"
+          class="menu-item"
+          [routerLink]="['/' + item.MenuViewName.toLowerCase()]"
+          routerLinkActive="active"
+        >
+          <img
+            class="icon-img"
+            [src]="'assets/icons/' + (item.Icon || 'default.png')"
+            [alt]="item.DisplayName + ' Icon'"
+          />
+          <span class="label">{{ item.DisplayName }}</span>
+        </a>
       </ng-container>
     </ng-container>
-
   </div>
 </nav>
