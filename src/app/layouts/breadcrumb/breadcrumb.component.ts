@@ -26,7 +26,7 @@ export class BreadcrumbComponent {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Set currentRoute initially and update on route changes
@@ -42,23 +42,41 @@ export class BreadcrumbComponent {
   }
 
   // Build breadcrumb from route config or dynamic parameters
+  // updateBreadcrumb(): void {
+  //   const breadcrumbs: string[] = [];
+  //   let route = this.activatedRoute.root;
+
+  //   while (route.firstChild) {
+  //     route = route.firstChild;
+  //     const routeSnapshot = route.snapshot;
+
+  //     if (routeSnapshot.data['breadcrumb']) {
+  //       breadcrumbs.push(routeSnapshot.data['breadcrumb']);
+  //     } else if (routeSnapshot.params['id']) {
+  //       // Optional: fallback for dynamic ID-based routes
+  //       breadcrumbs.push(`Details for ${routeSnapshot.params['id']}`);
+  //     }
+  //   }
+
+  //   this.currentPage = breadcrumbs.join(' / ') || 'Dashboard / Home';
+  // }
   updateBreadcrumb(): void {
     const breadcrumbs: string[] = [];
     let route = this.activatedRoute.root;
 
     while (route.firstChild) {
       route = route.firstChild;
-      const routeSnapshot = route.snapshot;
+      const snapshot = route.snapshot;
 
-      if (routeSnapshot.data['breadcrumb']) {
-        breadcrumbs.push(routeSnapshot.data['breadcrumb']);
-      } else if (routeSnapshot.params['id']) {
-        // Optional: fallback for dynamic ID-based routes
-        breadcrumbs.push(`Details for ${routeSnapshot.params['id']}`);
+      const breadcrumb = snapshot.data['breadcrumb'];
+      if (breadcrumb) {
+        breadcrumbs.push(breadcrumb);
+      } else if (snapshot.params['id']) {
+        breadcrumbs.push(`Details for ${snapshot.params['id']}`);
       }
     }
 
-    this.currentPage = breadcrumbs.join(' / ') || 'Dashboard / Home';
+    this.currentPage = breadcrumbs.join(' / ') || 'Home';
   }
 
   // Show the floating popup

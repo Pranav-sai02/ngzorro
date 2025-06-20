@@ -41,11 +41,15 @@ const routes: Routes = [
         data: { breadcrumb: 'Dashboard' },
       },
       {
-        path: 'claims',
-        component: ClaimsComponent,
-        canActivate: [authGuard],
-        title: 'Claims',
-        data: { breadcrumb: 'Call Centre / Claims' },
+        path: 'call-centre',
+        data: { breadcrumb: 'Call Centre' },
+        children: [
+          {
+            path: 'claims',
+            component: ClaimsComponent,
+            data: { breadcrumb: 'Claims' }
+          }
+        ]
       },
       {
         path: 'users',
@@ -69,13 +73,15 @@ const routes: Routes = [
         title: 'client',
         data: { breadcrumb: 'Client' },
       },
+      
       {
         path: 'client-group',
         component: ClientGroupComponent,
         canActivate: [authGuard],
         title: 'client',
-        data: { breadcrumb: 'Client / Client Group' },
+        data: { breadcrumb: ' Client Group' },
       },
+    
 
       {
         path: 'service-provider',
@@ -102,4 +108,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

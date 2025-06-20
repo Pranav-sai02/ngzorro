@@ -6,96 +6,99 @@ import { SidebarService } from '../../services/sidebar.service';
   selector: 'app-sidebar',
   standalone: false,
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.css',
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
-  groupedMenu: { [section: string]: Sidebar[] } = {}; // Grouped menu items by section
-  topLevelMenuItems: Sidebar[] = []; // Items like Home/Dashboard shown outside group
-   isCollapsed: boolean = true;// sidebar starts collapsed
 
-  // Display order for sidebar sections
-  sectionOrder: string[] = [
+  public topLevelMenuItems: Sidebar[] = []; // Items like Home/Dashboard
+  public groupedMenu: { [section: string]: Sidebar[] } = {}; // Grouped submenus
+  public isCollapsed: boolean = true; // Sidebar starts collapsed
+
+  // Section order used to render grouped menus in fixed order
+  public sectionOrder: string[] = [
     'Call Centre',
     'Configuration',
     'Company',
     'Rating Questions',
     'Client',
+    'Security',
     'Services',
     'Transport',
     'Admin',
     'Import',
     'Reports',
     'Sms',
-    'Security',
-    'General', // Fallback/default group
+    'General' // fallback group
   ];
 
-  list!: [
-    'Call Centre',
-    'Configuration',
-    'Company',
-    'Rating Questions',
-    'Client',
-    'Services',
-    'Transport',
-    'Admin',
-    'Import',
-    'Reports',
-    'Sms',
-    'Security',
-    'General'
-  ];
-
-  constructor(private sidebarService: SidebarService) {}
+  constructor(private sidebarService: SidebarService) { }
 
   ngOnInit(): void {
-    // Fetch sidebar menu items from the service
-    this.sidebarService.getMenuItems().subscribe({
-      next: (items) => {
-        const activeItems = items.filter((item) => item.IsActive); // Only show active
+    this.loadMenuItems();
+  }
 
-        // Top-level items (e.g., Home or Dashboard)
-        this.topLevelMenuItems = activeItems.filter(
-          (item) => item.MenuPath === 'Home' || item.MenuPath === 'DashBoard'
+  // Fetch and process menu items
+  private loadMenuItems(): void {
+    this.sidebarService.getMenuItems().subscribe({
+      next: (items: Sidebar[]) => {
+        const activeItems = items.filter(item => item.IsActive);
+
+        // Top-level menu: Home or Dashboard
+        this.topLevelMenuItems = activeItems.filter(item =>
+          ['Home', 'DashBoard'].includes(item.MenuPath)
         );
 
-        // Groupable sub-items (with path structure like "Configuration/Settings")
+        // Grouped menu items (like Configuration/Settings)
         const groupableItems = activeItems
-          .filter(
-            (item) =>
-              item.MenuPath.includes('/') &&
-              !this.topLevelMenuItems.includes(item)
+          .filter(item =>
+            item.MenuPath.includes('/') && !this.topLevelMenuItems.includes(item)
           )
-          .sort((a, b) => a.MenuId - b.MenuId); // Optional sorting
+          .sort((a, b) => a.MenuId - b.MenuId);
 
-        // Group items by first path segment
         this.groupedMenu = this.groupBySection(groupableItems);
       },
-      error: (err) => {
-        console.error('Error fetching sidebar menu items:', err);
-      },
+      error: (error) => {
+        console.error('❌ Failed to load sidebar menu items:', error);
+      }
     });
   }
 
-  // Group sidebar items by their first path segment
+  // Group menu items by their first path segment (e.g., 'Configuration/Settings' -> 'Configuration')
   private groupBySection(items: Sidebar[]): { [section: string]: Sidebar[] } {
     const grouped: { [section: string]: Sidebar[] } = {};
 
-    items.forEach((item) => {
+    // Optional alias map for remapping certain paths to defined sections
+    const sectionAliasMap: { [key: string]: string } = {
+      cases: 'Call Centre' // Add more mappings if needed
+    };
+
+    items.forEach(item => {
       const pathParts = item.MenuPath.split('/');
-      const section = pathParts.length > 1 ? pathParts[0] : 'General';
+      const sectionKeyRaw = pathParts[0] || 'General';
+      const sectionKey = sectionKeyRaw.toLowerCase();
 
-      if (!grouped[section]) {
-        grouped[section] = [];
+      // Check alias mapping or fall back to case-insensitive match in sectionOrder
+      const mappedSection =
+        sectionAliasMap[sectionKey] ||
+        this.sectionOrder.find(section => section.toLowerCase() === sectionKey) ||
+        'General';
+
+      if (!grouped[mappedSection]) {
+        grouped[mappedSection] = [];
       }
-      grouped[section].push(item);
+      grouped[mappedSection].push(item);
     });
 
-    // Sort items within each section by MenuId
-    Object.keys(grouped).forEach((section) => {
+    // Sort each section's items by MenuId
+    for (const section in grouped) {
       grouped[section].sort((a, b) => a.MenuId - b.MenuId);
-    });
+    }
 
     return grouped;
+  }
+
+  // trackBy function for better ngFor performance
+  public trackByMenuId(index: number, item: Sidebar): number {
+    return item.MenuId;
   }
 }
