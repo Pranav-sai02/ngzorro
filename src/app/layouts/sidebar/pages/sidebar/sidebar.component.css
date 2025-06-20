@@ -77,10 +77,19 @@
   font-size: 0.95rem;
   color: white;
   cursor: pointer;
+  text-decoration: none;
   transition: background 0.5s ease-in-out, border-radius 0.5s ease-in-out, padding 0.5s ease-in-out;
   border-radius: 8px;
   margin: 2px 0;
 }
+
+.menu-item:hover,
+.menu-item:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: none; /* ✅ added */
+  outline: none;
+}
+
 
 .sidebar.collapsed .menu-item {
   padding: 7px 27px; /* don't increase vertical space to avoid jump */
@@ -138,7 +147,8 @@
 .sidebar-toggle {
   display: flex;
   justify-content: flex-end;
-  padding: 8px 16px;
+  padding: 8px 0px;
+  justify-content: center;
 }
 
 .sidebar-toggle button {
@@ -147,7 +157,7 @@
   color: white;
   font-size: 24px;
   cursor: pointer;
-}
+} 
 
 .sidebar-toggle button:hover {
   color: #00b4b6;
