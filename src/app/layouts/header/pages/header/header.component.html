@@ -1,12 +1,21 @@
 <div class="topbar">
-  <div class="date-box">
+  <!-- <div class="date-box">
     {{ currentDateOnly }}
+  </div> -->
+  <!-- Logo Section -->
+  <div class="logo">
+    <div class="logo-text">
+      <span class="fusion" aria-hidden="true"></span>
+      <span class="edge" >FusionEdge</span>
+    </div>
   </div>
 
   <div class="topbar-right">
     <div class="last-login">
+      <div class="date-box">
       Last Login Date:
       {{ currentDateTime | date : "EEE, MMM dd, y, hh:mm:ss a" }}
+      </div>
     </div>
 
     <div class="user-container">

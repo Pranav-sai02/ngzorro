@@ -148,3 +148,19 @@
 .logout-icon i {
   font-size: 1.4rem;
 }
+
+.edge {
+  color: #00b4b6; /* accent brand color */
+}
+
+.logo {
+  padding-left: 16px; /* standard padding */
+  margin-bottom: 30px;
+  height: 44px;
+  font-family: "Inter", sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  line-height: 100%;
+  position: relative;
+  transition: padding-left 0.3s ease-in-out; /* logo shifts left on collapse */
+}
